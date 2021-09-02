@@ -5,10 +5,14 @@ import styled from "styled-components";
 export default function Payment() {
   const { enrollment } = useApi();
   const [enrollmentFilled, setEnrollmentFilled] = useState(false);
+  const [ticketModality, setTicketModality] = useState({
+    ticket: "",
+    price: 0,
+    hotel: "",
+  });
 
   useEffect(() => {
     enrollment.getPersonalInformations().then((response) => {
-      console.log(response);
       if (response.data) setEnrollmentFilled(true);
     });
   }, []);
@@ -25,7 +29,6 @@ export default function Payment() {
       </Wrapper>
     );
   }
-
   return (
     <>
       <Container>
@@ -36,17 +39,75 @@ export default function Payment() {
         <span>Primeiro, escolha sua modalidade de ingresso </span>
 
         <div className="modalities">
-          <ModalitiesBox>
+          <ModalitiesBox
+            isClicked={ticketModality.ticket === "Presencial"}
+            onClick={() => {
+              setTicketModality({
+                ticket: "Presencial",
+                price: 250,
+                hotel: "",
+              });
+            }}
+          >
             <span className="type">Presencial</span>
             <span className="price">R$ 250</span>
           </ModalitiesBox>
 
-          <ModalitiesBox>
+          <ModalitiesBox
+            isClicked={ticketModality.ticket === "Online"}
+            onClick={() => {
+              setTicketModality({
+                ticket: "Online",
+                price: 100,
+                hotel: false,
+              });
+            }}
+          >
             <span className="type">Online</span>
             <span className="price">R$ 100</span>
           </ModalitiesBox>
         </div>
       </ModalitiesContainer>
+
+      {ticketModality.ticket === "Presencial" ? (
+        <ModalitiesContainer>
+          <span>Ótimo! Agora escolha sua modalidade de hospedagem </span>
+
+          <div className="modalities">
+            <ModalitiesBox
+              isClicked={ticketModality.hotel === false}
+              onClick={() => {
+                setTicketModality({
+                  ticket: "Presencial",
+                  price: 250,
+                  hotel: false,
+                });
+              }}
+            >
+              <span className="type">Sem Hotel</span>
+              <span className="price">+ R$ 0</span>
+            </ModalitiesBox>
+
+            <ModalitiesBox
+              isClicked={ticketModality.hotel === true}
+              onClick={() => {
+                setTicketModality({
+                  ticket: "Presencial",
+                  price: 600,
+                  hotel: true,
+                });
+              }}
+            >
+              <span className="type">Com Hotel</span>
+              <span className="price">+ R$ 350</span>
+            </ModalitiesBox>
+          </div>
+        </ModalitiesContainer>
+      ) : (
+        ""
+      )}
+
+      {ticketModality.hotel !== "" ? "sim" : "não"}
     </>
   );
 }
@@ -108,6 +169,7 @@ const ModalitiesBox = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-color: ${(props) => (props.isClicked ? "#FFEED2" : "none")};
   .type {
     font-size: 16px;
     line-height: 19px;
