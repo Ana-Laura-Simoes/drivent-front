@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useApi from "./../../../hooks/useApi";
 import styled from "styled-components";
+import UnfilledEnrollment from "./TicketComponents.js/UnfilledEnrollment";
 
 export default function Payment() {
   const { enrollment } = useApi();
@@ -10,6 +11,7 @@ export default function Payment() {
     price: 0,
     hotel: "",
   });
+  const prices = { presencial: 250, online: 100, hotel: 350 };
 
   useEffect(() => {
     enrollment.getPersonalInformations().then((response) => {
@@ -17,17 +19,7 @@ export default function Payment() {
     });
   }, []);
   if (!enrollmentFilled) {
-    return (
-      <Wrapper>
-        <Title>Ingresso e pagamento</Title>
-        <UnfilledEnrollment>
-          <span>
-            Você precisa completar sua inscrição antes de prosseguir pra escolha
-            de ingresso
-          </span>
-        </UnfilledEnrollment>
-      </Wrapper>
-    );
+    return <UnfilledEnrollment />;
   }
   return (
     <>
@@ -125,28 +117,6 @@ export default function Payment() {
     </>
   );
 }
-
-const Wrapper = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-`;
-
-const UnfilledEnrollment = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  span {
-    font-size: 20px;
-    line-height: 23px;
-    text-align: center;
-    color: #8e8e8e;
-    text-align: center;
-  }
-`;
 
 const Container = styled.div`
   display: flex;
