@@ -29,7 +29,7 @@ export default function Payment() {
       </Wrapper>
     );
   }
-  console.log(ticketModality);
+
   return (
     <>
       <Container>
