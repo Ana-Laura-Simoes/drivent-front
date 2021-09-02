@@ -1,6 +1,7 @@
 import React from "react";
 import Cards from "react-credit-cards";
 import "react-credit-cards/es/styles-compiled.css";
+import UserContext from "../../contexts/UserContext";
 
 export default class PaymentForm extends React.Component {
   state = {
@@ -9,6 +10,17 @@ export default class PaymentForm extends React.Component {
     focus: "",
     name: "",
     number: "",
+    userId: "",
+    userEmail: "",
+  };
+
+  static contextType = UserContext;
+
+  componentDidMount() {
+    const user = this.context;
+    console.log(user.userData);
+    this.setState({ userId: user.userData.user.id });
+    this.setState({ userEmail: user.userData.user.email });
   };
 
   handleInputFocus = (e) => {
@@ -21,9 +33,8 @@ export default class PaymentForm extends React.Component {
   };
 
   sendClient = (e) => {
-    //const { name } = e.target;
     e.preventDefault();
-    alert(this.state.name);
+    console.log(this.state);
   };
 
   render() {
