@@ -75,10 +75,10 @@ function ensureAuthenticated() {
   ];
 }
 
-function ensureEventIsFinished() {
-  const { eventInfo } = useContext(EventInfoContext);
+// function ensureEventIsFinished() {
+//   const { eventInfo } = useContext(EventInfoContext);
 
-  return [
-    { to: "/", check: () => dayjs().isAfter(dayjs(eventInfo.endDate)), message: "Os certificados não foram liberados ainda!" }
-  ];
-}
+//   return [
+//     { to: "/", check: () => dayjs().isAfter(dayjs(eventInfo.endDate)), message: "Os certificados não foram liberados ainda!" }
+//   ];
+// }
