@@ -29,7 +29,6 @@ export default function Payment() {
       </Wrapper>
     );
   }
-
   return (
     <>
       <Container>
@@ -68,54 +67,61 @@ export default function Payment() {
             <span className="price">R$ 100</span>
           </ModalitiesBox>
         </div>
+
+        {ticketModality.ticket === "Presencial" ? (
+          <>
+            <span>Ótimo! Agora escolha sua modalidade de hospedagem </span>
+
+            <div className="modalities">
+              <ModalitiesBox
+                isClicked={ticketModality.hotel === false}
+                onClick={() => {
+                  setTicketModality({
+                    ticket: "Presencial",
+                    price: 250,
+                    hotel: false,
+                  });
+                }}
+              >
+                <span className="type">Sem Hotel</span>
+                <span className="price">+ R$ 0</span>
+              </ModalitiesBox>
+
+              <ModalitiesBox
+                isClicked={ticketModality.hotel === true}
+                onClick={() => {
+                  setTicketModality({
+                    ticket: "Presencial",
+                    price: 600,
+                    hotel: true,
+                  });
+                }}
+              >
+                <span className="type">Com Hotel</span>
+                <span className="price">+ R$ 350</span>
+              </ModalitiesBox>
+            </div>
+          </>
+        ) : (
+          ""
+        )}
+
+        {ticketModality.hotel !== "" ? (
+          <>
+            <BookTicket>
+              <span>
+                Fechado! O total ficou em
+                <strong> R$ {ticketModality.price}.</strong> Agora é só
+                confirmar:
+              </span>
+
+              <button>RESERVAR INGRESSO</button>
+            </BookTicket>
+          </>
+        ) : (
+          ""
+        )}
       </ModalitiesContainer>
-
-      {ticketModality.ticket === "Presencial" ? (
-        <ModalitiesContainer>
-          <span>Ótimo! Agora escolha sua modalidade de hospedagem </span>
-
-          <div className="modalities">
-            <ModalitiesBox
-              isClicked={ticketModality.hotel === false}
-              onClick={() => {
-                setTicketModality({
-                  ticket: "Presencial",
-                  price: 250,
-                  hotel: false,
-                });
-              }}
-            >
-              <span className="type">Sem Hotel</span>
-              <span className="price">+ R$ 0</span>
-            </ModalitiesBox>
-
-            <ModalitiesBox
-              isClicked={ticketModality.hotel === true}
-              onClick={() => {
-                setTicketModality({
-                  ticket: "Presencial",
-                  price: 600,
-                  hotel: true,
-                });
-              }}
-            >
-              <span className="type">Com Hotel</span>
-              <span className="price">+ R$ 350</span>
-            </ModalitiesBox>
-          </div>
-
-          {ticketModality.hotel !== "" ? (
-            <span>
-              Fechado! O total ficou em R$ {ticketModality.price}. Agora é só
-              confirmar:
-            </span>
-          ) : (
-            "aaaa"
-          )}
-        </ModalitiesContainer>
-      ) : (
-        ""
-      )}
     </>
   );
 }
@@ -171,7 +177,7 @@ const ModalitiesBox = styled.div`
   margin-right: 24px;
   width: 145px;
   height: 145px;
-  border: 1px solid #cecece;
+  border: ${(props) => (props.isClicked ? "none" : "1px solid #cecece ")};
   box-sizing: border-box;
   border-radius: 20px;
   display: flex;
@@ -179,6 +185,7 @@ const ModalitiesBox = styled.div`
   align-items: center;
   justify-content: center;
   background-color: ${(props) => (props.isClicked ? "#FFEED2" : "none")};
+  cursor: pointer;
   .type {
     font-size: 16px;
     line-height: 19px;
@@ -190,5 +197,24 @@ const ModalitiesBox = styled.div`
     line-height: 16px;
     text-align: center;
     color: #898989;
+  }
+`;
+
+const BookTicket = styled.div`
+  display: flex;
+  flex-direction: column;
+  button {
+    margin-top: 17px;
+    width: 162px;
+    height: 37px;
+    background: #e0e0e0;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 16px;
+    text-align: center;
+    color: #000000;
   }
 `;
