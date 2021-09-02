@@ -13,6 +13,10 @@ export default function ChosenTicket() {
         </TicketHolder>
       </Container>
 
+      <Container>
+        <h2>Pagamento</h2>
+        <PaymentForm/>
+      </Container>
     </>
   );
 }
