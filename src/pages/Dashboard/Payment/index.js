@@ -29,6 +29,7 @@ export default function Payment() {
       </Wrapper>
     );
   }
+  console.log(ticketModality);
   return (
     <>
       <Container>
@@ -102,12 +103,19 @@ export default function Payment() {
               <span className="price">+ R$ 350</span>
             </ModalitiesBox>
           </div>
+
+          {ticketModality.hotel !== "" ? (
+            <span>
+              Fechado! O total ficou em R$ {ticketModality.price}. Agora é só
+              confirmar:
+            </span>
+          ) : (
+            "aaaa"
+          )}
         </ModalitiesContainer>
       ) : (
         ""
       )}
-
-      {ticketModality.hotel !== "" ? "sim" : "não"}
     </>
   );
 }
@@ -154,6 +162,7 @@ const ModalitiesContainer = styled.div`
   }
   .modalities {
     margin-top: 17px;
+    margin-bottom: 43px;
     display: flex;
   }
 `;
