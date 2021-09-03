@@ -3,7 +3,6 @@ import styled from "styled-components";
 export default function UnfilledEnrollment() {
   return (
     <Wrapper>
-      <h1>Ingresso e pagamento</h1>
       <Message>
         <span>
           Você precisa completar sua inscrição antes de prosseguir pra escolha
