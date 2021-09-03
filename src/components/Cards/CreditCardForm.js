@@ -2,7 +2,7 @@ import React from "react";
 import Cards from "react-credit-cards";
 import "react-credit-cards/es/styles-compiled.css";
 import UserContext from "../../contexts/UserContext";
-import axios from "axios";
+import PaymentApi from "../../services/PaymentApi";
 
 export default class PaymentForm extends React.Component {
   state = {
@@ -19,7 +19,6 @@ export default class PaymentForm extends React.Component {
 
   componentDidMount() {
     const user = this.context;
-    console.log(user.userData);
     this.setState({ userId: user.userData.user.id });
     this.setState({ userEmail: user.userData.user.email });
   }
@@ -35,6 +34,7 @@ export default class PaymentForm extends React.Component {
 
   sendClient = (e) => {
     e.preventDefault();
+
     const body = {
       userName: this.state.name,
       userId: this.state.userId,
@@ -42,11 +42,17 @@ export default class PaymentForm extends React.Component {
       price: 500,
       type: "Online",
     };
-
-    axios
-      .post("http://localhost:4000/payment", body)
-      .then(() => console.log("sucesso"))
-      .catch(() => console.log("falha"));
+    
+    if (
+      this.state.number.length === 16 &&
+      this.state.name !== "" &&
+      this.state.expiry.length === 4 &&
+      this.state.cvc.length === 3
+    ) {
+      return PaymentApi.createPayment(body)
+        .then(() => alert("Foi"))
+        .catch(() => alert("Não foi"));
+    }
   };
 
   render() {
@@ -65,11 +71,12 @@ export default class PaymentForm extends React.Component {
               <div className="inputWrapper">
                 <input
                   className="long"
-                  type="tel"
+                  type="number"
                   name="number"
                   placeholder="Card Number"
                   onChange={this.handleInputChange}
                   onFocus={this.handleInputFocus}
+                  maxLength="16"
                 />
                 <h2>E.g.: 49..., 51..., 36... 37...</h2>
                 <input
@@ -83,7 +90,7 @@ export default class PaymentForm extends React.Component {
                 <div>
                   <input
                     className="medium"
-                    type="text"
+                    type="number"
                     name="expiry"
                     placeholder="Valid Thru (MM/YY)"
                     onChange={this.handleInputChange}
@@ -92,11 +99,12 @@ export default class PaymentForm extends React.Component {
                   />
                   <input
                     className="short"
-                    type="text"
+                    type="number"
                     name="cvc"
                     placeholder="CVC"
                     onChange={this.handleInputChange}
                     onFocus={this.handleInputFocus}
+                    maxLength="3"
                   />
                 </div>
               </div>

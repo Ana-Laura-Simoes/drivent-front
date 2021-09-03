@@ -45,6 +45,11 @@ export const Container = styled.div`
             ::placeholder {
               color: #929292;
             }
+
+            ::-webkit-outer-spin-button,
+            ::-webkit-inner-spin-button {
+              display: none;
+            }
           }
 
           .long {
