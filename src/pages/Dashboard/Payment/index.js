@@ -11,20 +11,10 @@ export default function Payment() {
   const [ticketModality, setTicketModality] = useState({
     ticket: "",
     hotel: "",
+    price: 0,
   });
 
   const prices = { principal: 250, online: 100, hotel: 350 };
-
-  function calculateTotal() {
-    let total = 0;
-    if (ticketModality.ticket === "Presencial" && ticketModality.hotel) {
-      total = prices.principal + prices.hotel;
-    } else if (ticketModality.ticket === "Presencial") {
-      total = prices.principal;
-    } else total = prices.online;
-
-    return total;
-  }
 
   useEffect(() => {
     enrollment.getPersonalInformations().then((response) => {
@@ -95,7 +85,8 @@ export default function Payment() {
             <BookTicket>
               <span>
                 Fechado! O total ficou em
-                <strong> R$ {calculateTotal()}.</strong> Agora é só confirmar:
+                <strong> R$ {ticketModality.price}</strong> Agora é só
+                confirmar:
               </span>
 
               <button onClick={() => setPayment(true)}>
@@ -109,7 +100,7 @@ export default function Payment() {
       </>
     );
   }
-  return "<Payment info={{ticket: ticketModality.ticket, hotel:ticketModality.hotel, price:calculatePrice()}} />";
+  return "<Payment info={...ticketModality} />";
 }
 
 const Container = styled.div`

@@ -9,6 +9,7 @@ export default function ModalityBox(props) {
         setTicketModality({
           ticket: type,
           hotel: hotel,
+          price: type === "Presencial" && hotel !== "" ? 250 + price : price,
         });
       }}
     >
