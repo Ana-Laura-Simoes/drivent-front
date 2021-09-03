@@ -100,7 +100,7 @@ export default function Payment() {
       </>
     );
   }
-  return "<Payment info={...ticketModality} />";
+  return "<Payment info={ticketModality} />";
 }
 
 const Container = styled.div`
