@@ -20,10 +20,9 @@ export default class PaymentForm extends React.Component {
 
   componentDidMount() {
     const user = this.context;
-    console.log(user);
     this.setState({ userId: user.userData.user.id });
     this.setState({ userEmail: user.userData.user.email });
-  };
+  }
 
   handleInputFocus = (e) => {
     this.setState({ focus: e.target.name });
@@ -34,9 +33,7 @@ export default class PaymentForm extends React.Component {
     this.setState({ [name]: value });
   };
 
-  sendClient = (e) => {
-    e.preventDefault();
-
+  sendClient = () => {
     const body = {
       userName: this.state.name,
       userId: this.state.userId,
@@ -54,6 +51,7 @@ export default class PaymentForm extends React.Component {
       return PaymentApi.createPayment(body)
         .then(() => {
           toast("Pagamento realizado com sucesso");
+          this.props.setPaid(true);
         })
         .catch(() => toast("Ocorreu um erro. Por favor, tente novamente!"));
     } else {
@@ -65,7 +63,12 @@ export default class PaymentForm extends React.Component {
     return (
       <>
         <div className="PaymentForm">
-          <form onSubmit={this.sendClient}>
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              this.sendClient();
+            }}
+          >
             <div className="wrapper">
               <Cards
                 cvc={this.state.cvc}

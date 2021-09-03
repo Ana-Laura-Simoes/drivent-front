@@ -75,6 +75,7 @@ function ensureAuthenticated() {
   ];
 }
 
+// eslint-disable-next-line
 function ensureEventIsFinished() {
   const { eventInfo } = useContext(EventInfoContext);
 

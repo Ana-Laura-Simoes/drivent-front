@@ -1,7 +1,10 @@
 import { Container, TicketHolder } from "./styles/PaymentStyles";
 import PaymentForm from "../../../components/Cards/CreditCardForm";
+import { useState } from "react";
 
 export default function ChosenTicket() {
+  const [paid, setPaid] = useState(false);
+  console.log(paid);
   return (
     <>
       <Container>
@@ -15,7 +18,7 @@ export default function ChosenTicket() {
 
       <Container>
         <h2>Pagamento</h2>
-        <PaymentForm />
+        {paid === false ? <PaymentForm setPaid={setPaid} /> : <div>Olá</div>}
       </Container>
     </>
   );
