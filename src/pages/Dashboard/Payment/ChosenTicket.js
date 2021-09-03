@@ -3,24 +3,25 @@ import PaymentForm from "../../../components/Cards/CreditCardForm";
 import { useState } from "react";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
 
-export default function ChosenTicket() {
+export default function ChosenTicket({ ticketModality }) {
   const [paid, setPaid] = useState(false);
-  console.log(paid);
+  
   return (
     <>
       <Container>
         <h2>Ingresso escolhido</h2>
         <TicketHolder>
-          {/*aqui deve vir algum estado dizendo o tipo de ingresso escolhido*/}
-          Presencial + Com Hotel
-          {/*aqui deve vir algum estado com o preço*/} <h2>R$ 600,00</h2>
+          {`${ticketModality.ticket} ${
+            ticketModality.hotel && ticketModality.ticket === "Presencial" ? "+ Com Hotel" : ticketModality.ticket === "Presencial"  && ticketModality.hotel === false ? "+ Sem Hotel" : ""
+          }`}
+          <h2>{`R$ ${ticketModality.price}`}</h2>
         </TicketHolder>
       </Container>
 
       <Container>
         <h2>Pagamento</h2>
         {paid === false ? (
-          <PaymentForm setPaid={setPaid} />
+          <PaymentForm setPaid={setPaid} ticketInformation = {ticketModality}/>
         ) : (
           <div className="iconHolder">
             <IoCheckmarkCircleSharp />

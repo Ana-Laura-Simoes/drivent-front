@@ -38,8 +38,9 @@ export default class PaymentForm extends React.Component {
       userName: this.state.name,
       userId: this.state.userId,
       userEmail: this.state.userEmail,
-      price: 500,
-      type: "Online",
+      price: this.props.ticketInformation.price,
+      type: this.props.ticketInformation.ticket,
+      hotel: this.props.ticketInformation.hotel
     };
 
     if (
