@@ -3,6 +3,7 @@ import useApi from "./../../../hooks/useApi";
 import styled from "styled-components";
 import ModalityBox from "./ModalityBox";
 import UnfilledEnrollmentMessage from "./UnfilledEnrollmentMessage";
+import { toast } from "react-toastify";
 
 export default function Payment() {
   const { enrollment } = useApi();
@@ -17,9 +18,22 @@ export default function Payment() {
   const prices = { principal: 250, online: 100, hotel: 350 };
 
   useEffect(() => {
-    enrollment.getPersonalInformations().then((response) => {
-      if (response.data) setEnrollmentFilled(true);
-    });
+    enrollment
+      .getPersonalInformations()
+      .then((response) => {
+        if (response.data) setEnrollmentFilled(true);
+      })
+      .catch((error) => {
+        if (error.response?.data?.details) {
+          for (const detail of error.response.data.details) {
+            toast(detail);
+          }
+        } else {
+          toast("Não foi possível carregar");
+        }
+        /* eslint-disable-next-line no-console */
+        console.log(error);
+      });
   }, []);
 
   if (!enrollmentFilled) {
