@@ -1,6 +1,7 @@
+import styled from "styled-components";
+import ChosenTicket from "./ChosenTicket";
 import { useEffect, useState } from "react";
 import useApi from "./../../../hooks/useApi";
-import styled from "styled-components";
 import ModalityBox from "./ModalityBox";
 import UnfilledEnrollmentMessage from "./UnfilledEnrollmentMessage";
 import { toast } from "react-toastify";
@@ -114,7 +115,7 @@ export default function Payment() {
       </>
     );
   }
-  return "<Payment info={ticketModality} />";
+  return <ChosenTicket ticketModality={ticketModality} />;
 }
 
 const Container = styled.div`
