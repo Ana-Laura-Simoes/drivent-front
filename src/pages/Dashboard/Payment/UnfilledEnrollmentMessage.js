@@ -1,15 +1,14 @@
 import styled from "styled-components";
 
-export default function UnfilledEnrollmentMessage() {
+export default function UnfilledEnrollment() {
   return (
     <Wrapper>
-      <h1>Ingresso e pagamento</h1>
-      <UnfilledEnrollment>
+      <Message>
         <span>
           Você precisa completar sua inscrição antes de prosseguir pra escolha
           de ingresso
         </span>
-      </UnfilledEnrollment>
+      </Message>
     </Wrapper>
   );
 }
@@ -19,14 +18,14 @@ const Wrapper = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  h1{
+  h1 {
     font-size: 34px;
     line-height: 40px;
     color: #000000;
   }
 `;
 
-const UnfilledEnrollment = styled.div`
+const Message = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
@@ -40,4 +39,3 @@ const UnfilledEnrollment = styled.div`
     text-align: center;
   }
 `;
-

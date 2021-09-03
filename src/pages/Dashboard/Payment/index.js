@@ -3,15 +3,17 @@ import useApi from "./../../../hooks/useApi";
 import styled from "styled-components";
 import ModalityBox from "./ModalityBox";
 import UnfilledEnrollmentMessage from "./UnfilledEnrollmentMessage";
+import { toast } from "react-toastify";
 
 export default function Payment() {
   const { enrollment } = useApi();
   const [enrollmentFilled, setEnrollmentFilled] = useState(false);
+  const [payment, setPayment] = useState(false);
   const [ticketModality, setTicketModality] = useState({
     ticket: "",
     hotel: "",
+    price: 0,
   });
-  const prices = { principal: 250, online: 100, hotel: 350 };
   
   function calculateTotal() {
     if(ticketModality.ticket==="Presencial"&& ticketModality.hotel) return prices.principal+prices.hotel;
@@ -19,61 +21,106 @@ export default function Payment() {
     return prices.online;
   }
 
+  const prices = { principal: 250, online: 100, hotel: 350 };
+
   useEffect(() => {
-    enrollment.getPersonalInformations().then((response) => {
-      if (response.data) setEnrollmentFilled(true);
-    });
+    enrollment
+      .getPersonalInformations()
+      .then((response) => {
+        if (response.data) setEnrollmentFilled(true);
+      })
+      .catch((error) => {
+        if (error.response?.data?.details) {
+          for (const detail of error.response.data.details) {
+            toast(detail);
+          }
+        } else {
+          toast("Não foi possível carregar");
+        }
+        /* eslint-disable-next-line no-console */
+        console.log(error);
+      });
   }, []);
 
   if (!enrollmentFilled) {
+    return <UnfilledEnrollmentMessage />;
+  }
+  if (!payment) {
     return (
-      <UnfilledEnrollmentMessage/>
+      <>
+        <Container>
+          <Title>Ingresso e pagamento</Title>
+        </Container>
+
+        <ModalitiesContainer>
+          <span>Primeiro, escolha sua modalidade de ingresso </span>
+
+          <div className="modalities">
+            <ModalityBox
+              type={"Presencial"}
+              label={"Presencial"}
+              selection={ticketModality.ticket === "Presencial"}
+              price={prices.principal}
+              setTicketModality={setTicketModality}
+              hotel={""}
+            />
+            <ModalityBox
+              type={"Online"}
+              label={"Online"}
+              selection={ticketModality.ticket === "Online"}
+              price={prices.online}
+              setTicketModality={setTicketModality}
+              hotel={false}
+            />
+          </div>
+
+          {ticketModality.ticket === "Presencial" ? (
+            <>
+              <span>Ótimo! Agora escolha sua modalidade de hospedagem </span>
+
+              <div className="modalities">
+                <ModalityBox
+                  type={"Presencial"}
+                  label={"Sem Hotel"}
+                  selection={ticketModality.hotel === false}
+                  price={0}
+                  setTicketModality={setTicketModality}
+                  hotel={false}
+                />
+                <ModalityBox
+                  type={"Presencial"}
+                  label={"Com Hotel"}
+                  selection={ticketModality.hotel === true}
+                  price={prices.hotel}
+                  setTicketModality={setTicketModality}
+                  hotel={true}
+                />
+              </div>
+            </>
+          ) : (
+            ""
+          )}
+
+          {ticketModality.hotel !== "" ? (
+            <BookTicket>
+              <span>
+                Fechado! O total ficou em
+                <strong> R$ {ticketModality.price}</strong> Agora é só
+                confirmar:
+              </span>
+
+              <button onClick={() => setPayment(true)}>
+                RESERVAR INGRESSO
+              </button>
+            </BookTicket>
+          ) : (
+            ""
+          )}
+        </ModalitiesContainer>
+      </>
     );
   }
-
-  return (
-    <>
-      <Container>
-        <Title>Ingresso e pagamento</Title>
-      </Container>
-
-      <ModalitiesContainer>
-        <span>Primeiro, escolha sua modalidade de ingresso </span>
-        
-        <div className="modalities">
-          <ModalityBox type={"Presencial"} label={"Presencial"} selection={ticketModality.ticket==="Presencial"} price={prices.principal} setTicketModality={setTicketModality} hotel={""}/>
-          <ModalityBox type={"Online"} label={"Online"} selection={ticketModality.ticket==="Online"} price={prices.online} setTicketModality={setTicketModality} hotel={false}/>
-        </div>
-
-        {ticketModality.ticket === "Presencial" ? (
-          <>
-            <span>Ótimo! Agora escolha sua modalidade de hospedagem </span>
-
-            <div className="modalities">
-              <ModalityBox type={"Presencial"} label={"Sem Hotel"} selection={ticketModality.hotel===false} price={0} setTicketModality={setTicketModality} hotel={false}/>
-              <ModalityBox type={"Presencial"} label={"Com Hotel"} selection={ticketModality.hotel===true} price={prices.hotel} setTicketModality={setTicketModality} hotel={true}/>
-            </div>
-          </>
-        ) : (
-          ""
-        )}
-
-        {ticketModality.hotel !== "" ? (
-          <BookTicket>
-            <span>
-              Fechado! O total ficou em
-              <strong> R$ {calculateTotal()}.</strong> Agora é só
-              confirmar:
-            </span>
-
-            <button>RESERVAR INGRESSO</button>
-          </BookTicket>
-        ) : (
-          ""
-        )}
-      </ModalitiesContainer>
-    </>
-  );
+  return "<Payment info={ticketModality} />";
 }
 
 const Container = styled.div`
