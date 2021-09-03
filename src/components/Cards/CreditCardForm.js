@@ -2,6 +2,7 @@ import React from "react";
 import Cards from "react-credit-cards";
 import "react-credit-cards/es/styles-compiled.css";
 import UserContext from "../../contexts/UserContext";
+import axios from "axios";
 
 export default class PaymentForm extends React.Component {
   state = {
@@ -21,7 +22,7 @@ export default class PaymentForm extends React.Component {
     console.log(user.userData);
     this.setState({ userId: user.userData.user.id });
     this.setState({ userEmail: user.userData.user.email });
-  };
+  }
 
   handleInputFocus = (e) => {
     this.setState({ focus: e.target.name });
@@ -34,7 +35,18 @@ export default class PaymentForm extends React.Component {
 
   sendClient = (e) => {
     e.preventDefault();
-    console.log(this.state);
+    const body = {
+      userName: this.state.name,
+      userId: this.state.userId,
+      userEmail: this.state.userEmail,
+      price: 500,
+      type: "Online",
+    };
+
+    axios
+      .post("http://localhost:4000/payment", body)
+      .then(() => console.log("sucesso"))
+      .catch(() => console.log("falha"));
   };
 
   render() {
