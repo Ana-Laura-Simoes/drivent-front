@@ -12,6 +12,35 @@ export const Container = styled.div`
     margin-bottom: 17px;
   }
 
+  .iconHolder {
+    display: flex;
+    align-items: center;
+
+    div {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-left: 10px;
+
+      h1 {
+        font-size: 16px;
+        color: #454545;
+        font-weight: 700;
+      }
+
+      h2 {
+        font-size: 16px;
+        margin-bottom: 0;
+        color: #454545;
+      }
+    }
+    svg {
+      color: #36b853;
+      height: 40px;
+      width: 40px;
+    }
+  }
+
   .PaymentForm {
     margin: 0;
     display: flex;
