@@ -3,6 +3,7 @@ import Cards from "react-credit-cards";
 import "react-credit-cards/es/styles-compiled.css";
 import UserContext from "../../contexts/UserContext";
 import PaymentApi from "../../services/PaymentApi";
+import { toast } from "react-toastify";
 
 export default class PaymentForm extends React.Component {
   state = {
@@ -19,9 +20,10 @@ export default class PaymentForm extends React.Component {
 
   componentDidMount() {
     const user = this.context;
+    console.log(user);
     this.setState({ userId: user.userData.user.id });
     this.setState({ userEmail: user.userData.user.email });
-  }
+  };
 
   handleInputFocus = (e) => {
     this.setState({ focus: e.target.name });
@@ -42,16 +44,20 @@ export default class PaymentForm extends React.Component {
       price: 500,
       type: "Online",
     };
-    
+
     if (
       this.state.number.length === 16 &&
-      this.state.name !== "" &&
+      this.state.name.length > 4 &&
       this.state.expiry.length === 4 &&
       this.state.cvc.length === 3
     ) {
       return PaymentApi.createPayment(body)
-        .then(() => alert("Foi"))
-        .catch(() => alert("Não foi"));
+        .then(() => {
+          toast("Pagamento realizado com sucesso");
+        })
+        .catch(() => toast("Ocorreu um erro. Por favor, tente novamente!"));
+    } else {
+      return toast("Por favor, preencha os dados corretamente");
     }
   };
 
