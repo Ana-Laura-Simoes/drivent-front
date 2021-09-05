@@ -6,7 +6,7 @@ export default function HotelCard({ id, image, name, types, available, select, s
       <img src={image}></img>
       <Name>{name}</Name>
       <Info>Tipos de acomodação:</Info>
-      <Status>{types.map(t => <span>{t},</span>)} </Status>
+      <Status>{types.map((t, index) => <span key={index}>{t},</span>)} </Status>
       <Info>Vagas disponíveis:</Info>
       <Status>{available}</Status>
     </Wrapper>

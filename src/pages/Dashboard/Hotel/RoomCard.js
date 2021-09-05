@@ -2,26 +2,28 @@ import styled from "styled-components";
 import { IoPersonSharp, IoPersonOutline } from "react-icons/io5";
 
 export default function RoomCard({ id, number, max, available, selected, changeSelected }) {
+  console.log(id);
   function renderPerson(quantity, ocupied, selected) {
     const render = [];
     for(let i = 0; i<quantity; i++) {
       if(ocupied) {
-        render.push(<IoPersonSharp fontSize="20px" color="black"/>);
+        render.push(<IoPersonSharp key={i} fontSize="20px" color="black"/>);
         ocupied--;
       } else if(selected) {
-        render.push(<IoPersonSharp fontSize="20px" color="blue"/>);
+        render.push(<IoPersonSharp key={i} fontSize="20px" color="#FF4791"/>);
+        selected=false;
       } else {
-        render.push(<IoPersonOutline fontSize="20px" color="black"/>);
+        render.push(<IoPersonOutline key={i} fontSize="20px" color="black"/>);
       }
     }
     return render.reverse();
   }
 
   return (
-    <Wrapper full={!available} onClick={() => changeSelected(id)}>
+    <Wrapper full={!available} selected={selected} onClick={() => changeSelected(id)}>
       <span>{number}</span>
       <Occupants>
-        {renderPerson(max, max-available, false)}
+        {renderPerson(max, max-available, selected)}
       </Occupants>
     </Wrapper>
   );
@@ -32,7 +34,7 @@ const Wrapper = styled.div`
   height: 45px;
   border: 1px solid #CECECE;
   border-radius: 10px;
-  background-color: ${(props) => (props.full ? "grey" : "white")};
+  background-color: ${(props) => (props.full ? "grey" : props.selected? "#FFEED2" : "white")};
   cursor: pointer;
   display: flex;
   align-items: center;

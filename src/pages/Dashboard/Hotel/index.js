@@ -9,6 +9,7 @@ export default function Hotel() {
   const { hotel } = useApi();
   const [hotels, setHotels] = useState([]);
   const [currentHotel, setCurrentHotel] = useState("none");
+  const [currentRoom, setCurrentRoom] = useState("none");
 
   useEffect(() => {
     hotel
@@ -40,14 +41,22 @@ export default function Hotel() {
       });
   }, []);
 
-  console.log("hotels", hotels);
-
   function hotelSelection(current) {
     hotels.forEach((h, index) => index===current?h.selected=true:h.selected=false);
     setCurrentHotel(current);
     console.log(current);
   }
 
+  function changeRoom(id) {
+    console.log("aqui");
+    hotels.forEach(h => {
+      h.rooms.forEach(r => {
+        r.selected=r.id===id?true:false;
+      });
+    });
+    setHotels([...hotels]);
+  }
+  console.log(hotels);
   return (
     <Wrapper>
       <Title>Escolha de hotel e quarto</Title>
@@ -59,10 +68,11 @@ export default function Hotel() {
         <>
           <SubTitle>Ótima pedida! Agora escolha seu quarto:</SubTitle>
           <RoomsSection>
-            {hotels[currentHotel].rooms.map(r => <RoomCard key={r.id} number={r.number} max={r.maxCapacity} available={r.available}/>)}
+            {hotels[currentHotel].rooms.map(r => <RoomCard key={r.id} id={r.id} number={r.number} max={r.maxCapacity} available={r.available} selected={r.selected} changeSelected={changeRoom}/>)}
           </RoomsSection>
         </>:
         ""
+
       }
     </Wrapper>
   );
@@ -99,3 +109,18 @@ const RoomsSection = styled.div`
   flex-wrap: wrap;
   gap:8px 17px;
   `;
+
+const Button = styled.button`
+  margin-top: 17px;
+  width: 162px;
+  height: 37px;
+  background: #e0e0e0;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 16px;
+  text-align: center;
+  color: #000000;
+`;
