@@ -7,10 +7,15 @@ import RoomCard from "./RoomCard";
 
 export default function Hotel() {
   const { hotel } = useApi();
+  const [payed, setPayed] = useState(false);
+  const [ticketIncludesHotel, setTicketIncludesHotel] = useState(false);
+  const [alreadyBooked, setAlreadyBooked] = useState(false);
   const [hotels, setHotels] = useState([]);
   const [currentHotel, setCurrentHotel] = useState("none");
   const [currentRoom, setCurrentRoom] = useState("none");
+
   console.log("Room", currentRoom);
+
   useEffect(() => {
     hotel
       .getHotels()
@@ -52,7 +57,7 @@ export default function Hotel() {
       h.rooms.forEach(r => {
         if(r.id===id) {
           r.selected=true;
-          setCurrentRoom(id);
+          setCurrentRoom(r);
         }else{
           r.selected=false;
         }
@@ -60,7 +65,13 @@ export default function Hotel() {
     });
     setHotels([...hotels]);
   }
+
+  function confirmReservation() {
+    console.log("reservando");
+  }
+
   console.log(hotels);
+
   return (
     <Wrapper>
       <Title>Escolha de hotel e quarto</Title>
@@ -75,6 +86,10 @@ export default function Hotel() {
             {hotels[currentHotel].rooms.map(r => <RoomCard key={r.id} id={r.id} number={r.number} max={r.maxCapacity} available={r.available} selected={r.selected} changeSelected={changeRoom}/>)}
           </RoomsSection>
         </>:
+        ""
+      }
+      {currentRoom!=="none"?
+        <Button onClick={() => confirmReservation()}>RESERVAR QUARTO</Button>:
         ""
       }
     </Wrapper>

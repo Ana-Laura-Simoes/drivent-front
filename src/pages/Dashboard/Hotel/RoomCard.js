@@ -18,8 +18,12 @@ export default function RoomCard({ id, number, max, available, selected, changeS
     return render.reverse();
   }
 
+  function verifyIfNotFull() {
+    available?changeSelected(id):console.log("this room is full");
+  }
+
   return (
-    <Wrapper full={!available} selected={selected} onClick={() => changeSelected(id)}>
+    <Wrapper full={!available} selected={selected} onClick={() => verifyIfNotFull()}>
       <span>{number}</span>
       <Occupants>
         {renderPerson(max, max-available, selected)}
