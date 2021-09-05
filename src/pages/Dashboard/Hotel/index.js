@@ -59,7 +59,7 @@ export default function Hotel() {
         <>
           <SubTitle>Ótima pedida! Agora escolha seu quarto:</SubTitle>
           <RoomsSection>
-            {hotels[currentHotel].rooms.map(r => <RoomCard key={r.id} number={r.number}/>)}
+            {hotels[currentHotel].rooms.map(r => <RoomCard key={r.id} number={r.number} max={r.maxCapacity} available={r.available}/>)}
           </RoomsSection>
         </>:
         ""
