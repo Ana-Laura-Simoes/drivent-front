@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { IoPersonSharp, IoPersonOutline } from "react-icons/io5";
 
-export default function RoomCard({ number, max, available }) {
+export default function RoomCard({ id, number, max, available, selected, changeSelected }) {
   function renderPerson(quantity, ocupied, selected) {
     const render = [];
     for(let i = 0; i<quantity; i++) {
@@ -18,7 +18,7 @@ export default function RoomCard({ number, max, available }) {
   }
 
   return (
-    <Wrapper full={!available}>
+    <Wrapper full={!available} onClick={() => changeSelected(id)}>
       <span>{number}</span>
       <Occupants>
         {renderPerson(max, max-available, false)}
