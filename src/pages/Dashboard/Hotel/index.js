@@ -10,7 +10,7 @@ export default function Hotel() {
   const [hotels, setHotels] = useState([]);
   const [currentHotel, setCurrentHotel] = useState("none");
   const [currentRoom, setCurrentRoom] = useState("none");
-
+  console.log("Room", currentRoom);
   useEffect(() => {
     hotel
       .getHotels()
@@ -48,10 +48,14 @@ export default function Hotel() {
   }
 
   function changeRoom(id) {
-    console.log("aqui");
     hotels.forEach(h => {
       h.rooms.forEach(r => {
-        r.selected=r.id===id?true:false;
+        if(r.id===id) {
+          r.selected=true;
+          setCurrentRoom(id);
+        }else{
+          r.selected=false;
+        }
       });
     });
     setHotels([...hotels]);
@@ -72,7 +76,6 @@ export default function Hotel() {
           </RoomsSection>
         </>:
         ""
-
       }
     </Wrapper>
   );
