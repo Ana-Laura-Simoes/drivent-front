@@ -1,22 +1,25 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import useApi from "./../../../hooks/useApi";
 import { toast } from "react-toastify";
 import HotelCard from "./HotelCard";
 import RoomCard from "./RoomCard";
+import MissingSteps from "./MissingSteps";
 
 export default function Hotel() {
-  const { hotel } = useApi();
-  const [payed, setPayed] = useState(false);
-  const [ticketIncludesHotel, setTicketIncludesHotel] = useState(false);
+  const { hotel, payment } = useApi();
+  const [user, setUser] = useState(false);
   const [alreadyBooked, setAlreadyBooked] = useState(false);
   const [hotels, setHotels] = useState([]);
   const [currentHotel, setCurrentHotel] = useState("none");
   const [currentRoom, setCurrentRoom] = useState("none");
 
-  console.log("Room", currentRoom);
+  console.log("user", user);
 
   useEffect(() => {
+    payment.getPayment().then(({ data }) => {
+      data.length||setUser(data);
+    }).catch(err => console.log(err));
     hotel
       .getHotels()
       .then(({ data: hotels }) => {
@@ -71,6 +74,9 @@ export default function Hotel() {
   }
 
   console.log(hotels);
+
+  if(!user) return <MissingSteps title="Escolha de hotel e quarto" message="Você precisa ter confirmado pagamento antes de fazer a escolha de hospedagem"/>;
+  if(!user.hotel) return <MissingSteps title="Escolha de hotel e quarto" message="Sua modalidade de ingresso não inclui hospedagem, prossiga para a escolha de atividades"/>;
 
   return (
     <Wrapper>
