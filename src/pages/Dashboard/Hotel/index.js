@@ -7,21 +7,20 @@ import RoomCard from "./RoomCard";
 import MissingSteps from "./MissingSteps";
 
 export default function Hotel() {
-  const { hotel, payment, room, user } = useApi();
+  const { hotel, payment, room } = useApi();
   const [currentUser, setCurrentUser] = useState(false);
   const [alreadyBooked, setAlreadyBooked] = useState(false);
   const [hotels, setHotels] = useState([]);
   const [currentHotel, setCurrentHotel] = useState("none");
   const [currentRoom, setCurrentRoom] = useState("none");
 
-  console.log("user", currentUser);
-  console.log("currentRoom", currentRoom);
-
   useEffect(() => {
     payment.getPayment().then(({ data }) => {
       data.length||setCurrentUser(data);
-    }).catch(err => console.log(err));
-    user.getUser().then(response => console.log(response));
+    }).catch(err => 
+      /* eslint-disable-next-line no-console */
+      console.log(err)
+    );
     hotel
       .getHotels()
       .then(({ data: hotels }) => {
@@ -54,7 +53,6 @@ export default function Hotel() {
   function hotelSelection(current) {
     hotels.forEach((h, index) => index===current?h.selected=true:h.selected=false);
     setCurrentHotel(current);
-    console.log(current);
   }
 
   function changeRoom(id) {
@@ -76,6 +74,7 @@ export default function Hotel() {
     room.bookRoom(body).then(response => {
       setAlreadyBooked(true);
     }).catch(error => {
+      /* eslint-disable-next-line no-console */
       console.log(error);
     });
   }
@@ -88,7 +87,7 @@ export default function Hotel() {
       <Title>Escolha de hotel e quarto</Title>
       <SubTitle>Primeiro, escolha um hotel</SubTitle>
       <CardsSection>
-        {hotels.map((h, i) => <HotelCard key={h.id} id={i} name={h.name} image={"https://thumbs.dreamstime.com/z/hotel-de-luxo-488093.jpg"} types={h.types} available={h.totalAvailable} selected={h.selected} select={hotelSelection}/>)}
+        {hotels.map((h, i) => <HotelCard key={h.id} id={i} name={h.name} image={h.image} types={h.types} available={h.totalAvailable} selected={h.selected} select={hotelSelection}/>)}
       </CardsSection>
       {currentHotel!=="none"?
         <>

@@ -19,7 +19,7 @@ export default function RoomCard({ id, number, max, available, selected, changeS
   }
 
   function verifyIfNotFull() {
-    available?changeSelected(id):console.log("this room is full");
+    available?changeSelected(id):alert("Quarto lotado");
   }
 
   return (
