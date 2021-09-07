@@ -47,6 +47,7 @@ export default function Payment() {
         console.log(err)
       );
   }, []);
+
   if (paymentData) {
     return (
       <ChosenTicket
@@ -59,15 +60,15 @@ export default function Payment() {
       />
     );
   }
+
   if (!enrollmentFilled) {
     return <UnfilledEnrollmentMessage />;
   }
+
   if (!newPayment) {
     return (
       <>
-        <Container>
-          <Title>Ingresso e pagamento</Title>
-        </Container>
+        <Title>Ingresso e pagamento</Title>
 
         <ModalitiesContainer>
           <span>Primeiro, escolha sua modalidade de ingresso </span>
@@ -139,11 +140,6 @@ export default function Payment() {
   }
   return <ChosenTicket ticketModality={{ ...ticketModality, paid: false }} />;
 }
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
 
 const Title = styled.div`
   font-size: 34px;
