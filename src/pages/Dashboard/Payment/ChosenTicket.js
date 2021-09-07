@@ -4,15 +4,20 @@ import { useState } from "react";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
 
 export default function ChosenTicket({ ticketModality }) {
-  const [paid, setPaid] = useState(false);
-  
+  const [paid, setPaid] = useState(ticketModality.paid);
+
   return (
     <>
       <Container>
         <h2>Ingresso escolhido</h2>
         <TicketHolder>
           {`${ticketModality.ticket} ${
-            ticketModality.hotel && ticketModality.ticket === "Presencial" ? "+ Com Hotel" : ticketModality.ticket === "Presencial"  && ticketModality.hotel === false ? "+ Sem Hotel" : ""
+            ticketModality.hotel && ticketModality.ticket === "Presencial"
+              ? "+ Com Hotel"
+              : ticketModality.ticket === "Presencial" &&
+                ticketModality.hotel === false
+              ? "+ Sem Hotel"
+              : ""
           }`}
           <h2>{`R$ ${ticketModality.price}`}</h2>
         </TicketHolder>
@@ -21,7 +26,7 @@ export default function ChosenTicket({ ticketModality }) {
       <Container>
         <h2>Pagamento</h2>
         {paid === false ? (
-          <PaymentForm setPaid={setPaid} ticketInformation = {ticketModality}/>
+          <PaymentForm setPaid={setPaid} ticketInformation={ticketModality} />
         ) : (
           <div className="iconHolder">
             <IoCheckmarkCircleSharp />

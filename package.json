@@ -44,8 +44,7 @@
       "react-hooks/exhaustive-deps": "off",
       "react-hooks/rules-of-hooks": "off",
       "indent": [
-        "error",
-        2
+        "off"
       ],
       "linebreak-style": 0,
       "quotes": [
