@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import HotelCard from "./HotelCard";
 import RoomCard from "./RoomCard";
 import MissingSteps from "./MissingSteps";
+import ChosenHotel from "./ChosenHotel";
 
 export default function Hotel() {
   const { hotel, payment, room } = useApi();
@@ -13,20 +14,30 @@ export default function Hotel() {
   const [hotels, setHotels] = useState([]);
   const [currentHotel, setCurrentHotel] = useState("none");
   const [currentRoom, setCurrentRoom] = useState("none");
-
+  console.log("user", currentUser);
+  console.log("room", currentRoom);
+  console.log("hotels", hotels);
   useEffect(() => {
     payment.getPayment().then(({ data }) => {
       data.length||setCurrentUser(data);
-    }).catch(err => 
+      data.roomId&&setAlreadyBooked(true);
+    }).catch(error => {
+      if (error.response?.data?.details) {
+        for (const detail of error.response.data.details) {
+          toast(detail);
+        }
+      } else {
+        toast("Não foi possível carregar");
+      }
       /* eslint-disable-next-line no-console */
-      console.log(err)
-    );
+      console.log(error);
+    });
     hotel
       .getHotels()
       .then(({ data: hotels }) => {
-        const types = {};
-        let totalAvailable = 0;
         hotels.forEach(h => {
+          const types = {};
+          let totalAvailable = 0;
           h.rooms.forEach(r => {
             if(!types[r.type]) types[r.type]=r.type;
             totalAvailable+=r.available;
@@ -72,6 +83,9 @@ export default function Hotel() {
   function confirmReservation() {
     const body={ currentUser, currentRoom };
     room.bookRoom(body).then(response => {
+      const chosenRoom = currentUser;
+      chosenRoom.roomId=currentRoom.id;
+      setCurrentUser(chosenRoom);
       setAlreadyBooked(true);
     }).catch(error => {
       /* eslint-disable-next-line no-console */
@@ -79,9 +93,43 @@ export default function Hotel() {
     });
   }
 
+  function relocate() {
+    hotel
+      .getHotels()
+      .then(({ data: hotels }) => {
+        hotels.forEach(h => {
+          const types = {};
+          let totalAvailable = 0;
+          h.rooms.forEach(r => {
+            if(!types[r.type]) types[r.type]=r.type;
+            totalAvailable+=r.available;
+          });
+          h.totalAvailable = totalAvailable;
+          h.types=Object.keys(types);
+          h.selected=false;
+        });
+        setHotels(hotels);
+      })
+      .catch((error) => {
+        if (error.response?.data?.details) {
+          for (const detail of error.response.data.details) {
+            toast(detail);
+          }
+        } else {
+          toast("Não foi possível carregar");
+        }
+        /* eslint-disable-next-line no-console */
+        console.log(error);
+      });
+    setAlreadyBooked(false);
+  }
+
   if(!currentUser) return <MissingSteps title="Escolha de hotel e quarto" message="Você precisa ter confirmado pagamento antes de fazer a escolha de hospedagem"/>;
   if(!currentUser.hotel) return <MissingSteps title="Escolha de hotel e quarto" message="Sua modalidade de ingresso não inclui hospedagem, prossiga para a escolha de atividades"/>;
 
+  if(alreadyBooked) {
+    return <ChosenHotel roomId={currentUser.roomId} relocate={relocate} hotels={hotels}/>;
+  }
   return (
     <Wrapper>
       <Title>Escolha de hotel e quarto</Title>
@@ -91,7 +139,7 @@ export default function Hotel() {
       </CardsSection>
       {currentHotel!=="none"?
         <>
-          <SubTitle>Ótima pedida! Agora escolha seu quarto:</SubTitle>
+          {hotels[currentHotel].rooms.length?<SubTitle>Ótima pedida! Agora escolha seu quarto:</SubTitle>:""}
           <RoomsSection>
             {hotels[currentHotel].rooms.map(r => <RoomCard key={r.id} id={r.id} number={r.number} max={r.maxCapacity} available={r.available} selected={r.selected} changeSelected={changeRoom}/>)}
           </RoomsSection>
