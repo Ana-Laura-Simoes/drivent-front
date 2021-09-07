@@ -4,13 +4,12 @@ import useApi from "./../../../hooks/useApi";
 import { useState } from "react";
 
 export default function ChosenHotel({ roomId, relocate, hotels }) {
-  console.log("rooooom", roomId);
   const { room } = useApi();
   const [currentRoom, setCurrentRoom] = useState();
+
   useEffect(() => {
     room.getRoom(roomId).then(({ data }) => {
       const userRoom = data;
-      console.log(userRoom);
       hotels.forEach(h => {
         if(h.id===data.hotelId) {
           userRoom.hotel = h.name;
@@ -22,7 +21,6 @@ export default function ChosenHotel({ roomId, relocate, hotels }) {
       console.log(err)
     );
   }, []);
-  console.log("quarto", currentRoom);
 
   return (
     <>

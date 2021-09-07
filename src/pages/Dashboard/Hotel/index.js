@@ -14,9 +14,7 @@ export default function Hotel() {
   const [hotels, setHotels] = useState([]);
   const [currentHotel, setCurrentHotel] = useState("none");
   const [currentRoom, setCurrentRoom] = useState("none");
-  console.log("user", currentUser);
-  console.log("room", currentRoom);
-  console.log("hotels", hotels);
+  
   useEffect(() => {
     payment.getPayment().then(({ data }) => {
       data.length||setCurrentUser(data);
