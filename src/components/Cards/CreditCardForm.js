@@ -40,7 +40,8 @@ export default class PaymentForm extends React.Component {
       userEmail: this.state.userEmail,
       price: this.props.ticketInformation.price,
       type: this.props.ticketInformation.ticket,
-      hotel: this.props.ticketInformation.hotel
+      hotel: this.props.ticketInformation.hotel,
+      roomId: null
     };
 
     if (
