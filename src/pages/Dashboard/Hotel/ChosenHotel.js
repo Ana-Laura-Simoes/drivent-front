@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import styled from "styled-components";
 import useApi from "./../../../hooks/useApi";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function ChosenHotel({ roomId, relocate, hotels }) {
   const { room } = useApi();
@@ -16,7 +17,7 @@ export default function ChosenHotel({ roomId, relocate, hotels }) {
         }
       });
       setCurrentRoom(userRoom);
-    }).catch(err => {
+    }).catch(error => {
       if (error.response?.data?.details) {
         for (const detail of error.response.data.details) {
           toast(detail);
