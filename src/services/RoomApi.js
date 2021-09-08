@@ -9,4 +9,8 @@ export default class RoomApi extends AuthenticatedApi {
       }
     });
   }
+
+  getRoom(id) {
+    return api.get(`/rooms/${id}`);
+  }
 }

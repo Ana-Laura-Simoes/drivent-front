@@ -25,7 +25,7 @@ export default function Payment() {
       .then((response) => {
         if (response.data) setEnrollmentFilled(true);
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.response?.data?.details) {
           for (const detail of error.response.data.details) {
             toast(detail);
@@ -33,8 +33,6 @@ export default function Payment() {
         } else {
           toast("Não foi possível carregar a página");
         }
-        /* eslint-disable-next-line no-console */
-        console.log(error);
       });
 
     payment
