@@ -15,6 +15,12 @@ export default function Payment() {
     hotel: "",
     price: 0,
   });
+  
+  function calculateTotal() {
+    if(ticketModality.ticket==="Presencial"&& ticketModality.hotel) return prices.principal+prices.hotel;
+    if(ticketModality.ticket==="Presencial") return prices.principal;
+    return prices.online;
+  }
 
   const prices = { principal: 250, online: 100, hotel: 350 };
 
@@ -24,7 +30,7 @@ export default function Payment() {
       .then((response) => {
         if (response.data) setEnrollmentFilled(true);
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.response?.data?.details) {
           for (const detail of error.response.data.details) {
             toast(detail);
@@ -32,8 +38,6 @@ export default function Payment() {
         } else {
           toast("Não foi possível carregar");
         }
-        /* eslint-disable-next-line no-console */
-        console.log(error);
       });
   }, []);
 
