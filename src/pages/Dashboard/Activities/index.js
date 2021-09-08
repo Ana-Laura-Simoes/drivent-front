@@ -11,7 +11,6 @@ export default function Activities() {
     payment
       .getPayment()
       .then((response) => {
-        console.log(response.data);
         if (response.data.type === "Online") setIsAnOnlineTicket(true);
       })
       .catch((error) => {
