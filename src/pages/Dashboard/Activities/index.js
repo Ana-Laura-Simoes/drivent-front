@@ -1,7 +1,8 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import useApi from "./../../../hooks/useApi";
 import NotPaidMessage from "./NotPaidMessage";
+import DontNeedToChooseActivitiesMessage from "./DontNeedToChooseActivitiesMessage";
 import { toast } from "react-toastify";
 
 export default function Activities() {
@@ -22,13 +23,15 @@ export default function Activities() {
         } else {
           toast("Não foi possível carregar");
         }
-        /* eslint-disable-next-line no-console */
-        console.log(error);
       });
   }, []);
 
   if (!paymentData) {
     return <NotPaidMessage />;
+  }
+
+  if (paymentData.type === "Online") {
+    return <DontNeedToChooseActivitiesMessage />;
   }
 
   return <Title>Ingresso e pagamento</Title>;
