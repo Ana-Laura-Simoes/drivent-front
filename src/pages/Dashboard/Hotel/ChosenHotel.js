@@ -16,10 +16,15 @@ export default function ChosenHotel({ roomId, relocate, hotels }) {
         }
       });
       setCurrentRoom(userRoom);
-    }).catch(err => 
-      /* eslint-disable-next-line no-console */
-      console.log(err)
-    );
+    }).catch(err => {
+      if (error.response?.data?.details) {
+        for (const detail of error.response.data.details) {
+          toast(detail);
+        }
+      } else {
+        toast("Não foi possível carregar");
+      }
+    });
   }, []);
 
   return (

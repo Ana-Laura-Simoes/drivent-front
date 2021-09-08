@@ -27,8 +27,6 @@ export default function Hotel() {
       } else {
         toast("Não foi possível carregar");
       }
-      /* eslint-disable-next-line no-console */
-      console.log(error);
     });
     hotel
       .getHotels()
@@ -46,7 +44,7 @@ export default function Hotel() {
         });
         setHotels(hotels);
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.response?.data?.details) {
           for (const detail of error.response.data.details) {
             toast(detail);
@@ -54,8 +52,6 @@ export default function Hotel() {
         } else {
           toast("Não foi possível carregar");
         }
-        /* eslint-disable-next-line no-console */
-        console.log(error);
       });
   }, []);
 
@@ -86,8 +82,13 @@ export default function Hotel() {
       setCurrentUser(chosenRoom);
       setAlreadyBooked(true);
     }).catch(error => {
-      /* eslint-disable-next-line no-console */
-      console.log(error);
+      if (error.response?.data?.details) {
+        for (const detail of error.response.data.details) {
+          toast(detail);
+        }
+      } else {
+        toast("Não foi possível reservar o quarto");
+      }
     });
   }
 
@@ -108,7 +109,7 @@ export default function Hotel() {
         });
         setHotels(hotels);
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.response?.data?.details) {
           for (const detail of error.response.data.details) {
             toast(detail);
@@ -116,8 +117,6 @@ export default function Hotel() {
         } else {
           toast("Não foi possível carregar");
         }
-        /* eslint-disable-next-line no-console */
-        console.log(error);
       });
     setAlreadyBooked(false);
   }
