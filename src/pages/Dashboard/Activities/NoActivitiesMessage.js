@@ -1,6 +1,6 @@
 import { Wrapper, Message } from "../Styles/NotMessages";
 
-export default function NotPaidMessage(message) {
+export default function NoActivitiesMessage({ message }) {
   return (
     <Wrapper>
       <Message>

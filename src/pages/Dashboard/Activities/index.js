@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState, useContext } from "react";
 import useApi from "./../../../hooks/useApi";
-import NotPaidMessage from "./NotPaidMessage";
-import DontNeedToChooseActivitiesMessage from "./DontNeedToChooseActivitiesMessage";
+import NoActivitiesMessage from "./NoActivitiesMessage";
 import { toast } from "react-toastify";
 
 export default function Activities() {
@@ -27,11 +26,23 @@ export default function Activities() {
   }, []);
 
   if (!paymentData) {
-    return <NotPaidMessage />;
+    return (
+      <NoActivitiesMessage
+        message={
+          "Você precisa ter confirmado pagamento antes de fazer a escolha de atividades."
+        }
+      />
+    );
   }
 
   if (paymentData.type === "Online") {
-    return <DontNeedToChooseActivitiesMessage />;
+    return (
+      <NoActivitiesMessage
+        message={
+          "Sua modalidade de ingresso não necessita escolher atividade. Você terá acesso a todas as atividades."
+        }
+      />
+    );
   }
 
   return <Title>Ingresso e pagamento</Title>;
