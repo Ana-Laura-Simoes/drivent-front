@@ -33,7 +33,7 @@ export default function ChosenHotel({ roomId, relocate, hotels }) {
       <Title>Escolha de hotel e quarto</Title>
       <SubTitle>Você já escolheu seu quarto:</SubTitle>
       <Wrapper>
-        <img src={"https://upload.wikimedia.org/wikipedia/commons/7/79/Ponta_Negra_Beach_Hotel.jpg"}></img>
+        <img src={"https://upload.wikimedia.org/wikipedia/commons/7/79/Ponta_Negra_Beach_Hotel.jpg"} alt="hotel"></img>
         {currentRoom?
           <>
             <Name>{currentRoom.hotel}</Name>

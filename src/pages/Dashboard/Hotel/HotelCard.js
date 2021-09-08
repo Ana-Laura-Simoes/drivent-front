@@ -3,7 +3,7 @@ import styled from "styled-components";
 export default function HotelCard({ id, image, name, types, available, select, selected }) {
   return (
     <Wrapper isClicked={selected} onClick={() => select(id)}>
-      <img src={image}></img>
+      <img src={image} alt="hotel"></img>
       <Name>{name}</Name>
       <Info>Tipos de acomodação:</Info>
       <Status>{types.map((t, index) => <span key={index}>{t}{index===types.length-2?" e ":index===types.length-1?".":","}</span>)} </Status>
