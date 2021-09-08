@@ -1,5 +1,6 @@
 import AuthenticatedApi from "./AuthenticatedApi";
 import api from "./api";
+import AuthenticatedApi from "./AuthenticatedApi";
 
 export default class PaymentApi extends AuthenticatedApi {
   static createPayment(body) {
