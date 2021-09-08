@@ -22,8 +22,6 @@ export default function Activities() {
         } else {
           toast("Não foi possível carregar");
         }
-        /* eslint-disable-next-line no-console */
-        console.log(error);
       });
   }, []);
 
