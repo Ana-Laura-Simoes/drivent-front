@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useEffect, useState, useContext } from "react";
 import useApi from "./../../../hooks/useApi";
 import NoActivitiesMessage from "./NoActivitiesMessage";
+import ActivitiesPage from "./ActivitiesPage";
 import { toast } from "react-toastify";
 
 export default function Activities() {
@@ -45,7 +46,7 @@ export default function Activities() {
     );
   }
 
-  return <Title>Ingresso e pagamento</Title>;
+  return <ActivitiesPage/>;
 }
 
 const Title = styled.div`
