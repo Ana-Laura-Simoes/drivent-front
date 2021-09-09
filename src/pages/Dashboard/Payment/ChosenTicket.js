@@ -2,9 +2,11 @@ import { Container, TicketHolder } from "./styles/PaymentStyles";
 import PaymentForm from "../../../components/Cards/CreditCardForm";
 import { useState } from "react";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
+import useApi from "../../../hooks/useApi";
 
 export default function ChosenTicket({ ticketModality }) {
   const [paid, setPaid] = useState(false);
+  const { payment } = useApi();
   
   return (
     <>
@@ -21,7 +23,7 @@ export default function ChosenTicket({ ticketModality }) {
       <Container>
         <h2>Pagamento</h2>
         {paid === false ? (
-          <PaymentForm setPaid={setPaid} ticketInformation = {ticketModality}/>
+          <PaymentForm payment = {payment} setPaid={setPaid} ticketInformation = {ticketModality}/>
         ) : (
           <div className="iconHolder">
             <IoCheckmarkCircleSharp />

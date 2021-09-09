@@ -2,7 +2,7 @@ import React from "react";
 import Cards from "react-credit-cards";
 import "react-credit-cards/es/styles-compiled.css";
 import UserContext from "../../contexts/UserContext";
-import PaymentApi from "../../services/PaymentApi";
+//import PaymentApi from "../../services/PaymentApi";
 import { toast } from "react-toastify";
 import InputMask from "react-input-mask";
 
@@ -62,7 +62,7 @@ export default class PaymentForm extends React.Component {
       return toast("O CVC precisa ter 3 dígitos.");
     }
 
-    return PaymentApi.createPayment(body)
+    return this.props.payment.save(body)
       .then(() => {
         toast("Pagamento realizado com sucesso");
         this.props.setPaid(true);
