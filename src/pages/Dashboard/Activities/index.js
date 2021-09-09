@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
 import useApi from "./../../../hooks/useApi";
+import NoActivitiesMessage from "./NoActivitiesMessage";
+import ActivitiesPage from "./ActivitiesPage";
 import { toast } from "react-toastify";
-import DontNeedToChooseActivitiesMessage from "./DontNeedToChooseActivitiesMessage";
 
 export default function Activities() {
   const { payment } = useApi();
-  const [isAnOnlineTicket, setIsAnOnlineTicket] = useState(false);
+  const [paymentData, setPaymentData] = useState(false);
+  const [choosenDay, setChoosenDay] = useState("2021-10-22");
 
   useEffect(() => {
     payment
       .getPayment()
-      .then((response) => {
-        if (response.data.type === "Online") setIsAnOnlineTicket(true);
+      .then(({ data }) => {
+        data.length || setPaymentData(data);
       })
       .catch((error) => {
         if (error.response?.data?.details) {
@@ -24,9 +26,26 @@ export default function Activities() {
       });
   }, []);
 
-  if (isAnOnlineTicket) {
-    return <DontNeedToChooseActivitiesMessage />;
-  } else {
-    return "Atividades: Em breve!";
+  if (!paymentData) {
+    return (
+      <NoActivitiesMessage
+        message={
+          "Você precisa ter confirmado pagamento antes de fazer a escolha de atividades."
+        }
+      />
+    );
   }
+
+  if (paymentData.type === "Online") {
+    return (
+      <NoActivitiesMessage
+        message={
+          "Sua modalidade de ingresso não necessita escolher atividade. Você terá acesso a todas as atividades."
+        }
+      />
+    );
+  }
+
+  return <ActivitiesPage day={choosenDay}/>;
 }
+

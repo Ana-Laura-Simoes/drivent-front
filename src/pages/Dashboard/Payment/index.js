@@ -7,20 +7,15 @@ import UnfilledEnrollmentMessage from "./UnfilledEnrollmentMessage";
 import { toast } from "react-toastify";
 
 export default function Payment() {
-  const { enrollment } = useApi();
+  const { enrollment, payment } = useApi();
   const [enrollmentFilled, setEnrollmentFilled] = useState(false);
-  const [payment, setPayment] = useState(false);
+  const [paymentData, setPaymentData] = useState(false);
+  const [newPayment, setNewPayment] = useState(false);
   const [ticketModality, setTicketModality] = useState({
     ticket: "",
     hotel: "",
     price: 0,
   });
-  
-  /*function calculateTotal() {
-    if(ticketModality.ticket==="Presencial"&& ticketModality.hotel) return prices.principal+prices.hotel;
-    if(ticketModality.ticket==="Presencial") return prices.principal;
-    return prices.online;
-  }*/
 
   const prices = { principal: 250, online: 100, hotel: 350 };
 
@@ -30,26 +25,47 @@ export default function Payment() {
       .then((response) => {
         if (response.data) setEnrollmentFilled(true);
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.response?.data?.details) {
           for (const detail of error.response.data.details) {
             toast(detail);
           }
         } else {
-          toast("Não foi possível carregar");
+          toast("Não foi possível carregar a página");
         }
       });
+
+    payment
+      .getPayment()
+      .then(({ data }) => {
+        data.length || setPaymentData(data);
+      })
+      .catch((err) =>
+        toast("Não foi possível carregar seus pagamentos anteriores")
+      );
   }, []);
+
+  if (paymentData) {
+    return (
+      <ChosenTicket
+        ticketModality={{
+          ticket: paymentData.type,
+          price: paymentData.price,
+          hotel: paymentData.hotel,
+          paid: true,
+        }}
+      />
+    );
+  }
 
   if (!enrollmentFilled) {
     return <UnfilledEnrollmentMessage />;
   }
-  if (!payment) {
+
+  if (!newPayment) {
     return (
       <>
-        <Container>
-          <Title>Ingresso e pagamento</Title>
-        </Container>
+        <Title>Ingresso e pagamento</Title>
 
         <ModalitiesContainer>
           <span>Primeiro, escolha sua modalidade de ingresso </span>
@@ -108,7 +124,7 @@ export default function Payment() {
                 confirmar:
               </span>
 
-              <button onClick={() => setPayment(true)}>
+              <button onClick={() => setNewPayment(true)}>
                 RESERVAR INGRESSO
               </button>
             </BookTicket>
@@ -119,13 +135,8 @@ export default function Payment() {
       </>
     );
   }
-  return <ChosenTicket ticketModality={ticketModality} />;
+  return <ChosenTicket ticketModality={{ ...ticketModality, paid: false }} />;
 }
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
 
 const Title = styled.div`
   font-size: 34px;

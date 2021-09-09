@@ -1,19 +1,6 @@
 import styled from "styled-components";
 
-export default function DontNeedToChooseActivitiesMessage() {
-  return (
-    <Wrapper>
-      <Message>
-        <span>
-        Sua modalidade de ingresso não necessita escolher
-        atividade. Você terá acesso a todas as atividades.
-        </span>
-      </Message>
-    </Wrapper>
-  );
-}
-
-const Wrapper = styled.div`
+export const Wrapper = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
@@ -25,7 +12,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const Message = styled.div`
+export const Message = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
