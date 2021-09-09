@@ -1,18 +1,34 @@
 import styled from "styled-components";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import useApi from "./../../../hooks/useApi";
-import NoActivitiesMessage from "./NoActivitiesMessage";
 import { toast } from "react-toastify";
+import dayjs from "dayjs";
+import { BsBoxArrowInRight } from "react-icons/bs";
 
-export default function ActivitiesPage() {
-  const { payment } = useApi();
-  const [paymentData, setPaymentData] = useState(false);
+export default function ActivitiesPage({ day }) {
+  const { activity, location } = useApi();
+  const [activities, setActivities] = useState([]);
+  const [locations, setLocations] = useState([]);
 
-  /*useEffect(() => {
-    payment
-      .getPayment()
+  useEffect(() => {
+   location
+    .getLocations()
+    .then(({ data }) => {
+      setLocations(data);
+    })
+    .catch((error) => {
+      if (error.response?.data?.details) {
+        for (const detail of error.response.data.details) {
+          toast(detail);
+        }
+      } else {
+        toast("Não foi possível carregar os locais");
+      }
+    });
+    activity
+      .getActivitiesByDay(day)
       .then(({ data }) => {
-        data.length || setPaymentData(data);
+        setActivities(data);
       })
       .catch((error) => {
         if (error.response?.data?.details) {
@@ -20,28 +36,45 @@ export default function ActivitiesPage() {
             toast(detail);
           }
         } else {
-          toast("Não foi possível carregar");
+          toast("Não foi possível carregar as atividades");
         }
       });
   }, []);
-  */
 
+  locations.forEach((l) => {
+    let locationActivities=[];
+    activities.forEach((a) => {
+    if(a.locationId===l.id) locationActivities.push(a);
+  });
+  l.activities=locationActivities;
+    });
   return (
    <>
   <Title>Ingresso e pagamento</Title>
    <Container>
-       <Location>
-           <span className="title">Auditório Principal</span>
-           <div className="container"></div>
-       </Location>
-       <Location>
-           <span className="title">Auditório Lateral</span>
-           <div className="container"></div>
-       </Location>
-       <Location>
-           <span className="title">Sala de Workshop</span>
-           <div className="container"></div>
-       </Location>
+     {
+       locations.map((l) => (
+        <Location key={l.name}>
+        <span className="title">{l.name}</span>
+        <div className="container">
+          {l.activities.map((a, index) => (
+            <ActivityBox key={index}
+            hours={dayjs(a.endTime).hour()-dayjs(a.beginTime).hour()}>
+              <div className="info">
+                <span>{a.name}: {a.description}</span>
+                <span className="time">{dayjs(a.beginTime).format("HH:mm")} - {dayjs(a.endTime).format("HH:mm")}</span>
+              </div>
+              
+              <Register> 
+                <BsBoxArrowInRight className="registerOption"/>
+              </Register>
+               
+            </ActivityBox>
+       ))}
+        </div>
+    </Location>
+       ))
+     }
    </Container>
 
    </>
@@ -83,6 +116,39 @@ border: 1px solid #D7D7D7;
 border-radius: 2px;
 width:100%;
 height:100%;
+padding:10px;
 }
 `;
 
+const ActivityBox = styled.div ` 
+display:flex;
+justify-content: space-between;
+height: ${(props) => `${80*props.hours}px`};
+background: #F1F1F1;
+border-radius: 5px;
+margin-bottom:10px;
+padding:10px;
+cursor:pointer;
+
+.info{
+  display: flex;
+  flex-direction:column;
+span{
+font-weight: bold;
+font-size: 12px;
+line-height: 14px;
+color: #343434;
+margin-bottom: 5px;
+}
+.time{
+  font-weight : normal ;
+}
+}
+`;
+
+const Register = styled.div ` 
+.registerOption{
+ color:green; 
+ font-size:25px;
+}
+`;

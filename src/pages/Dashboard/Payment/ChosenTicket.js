@@ -12,12 +12,7 @@ export default function ChosenTicket({ ticketModality }) {
         <h2>Ingresso escolhido</h2>
         <TicketHolder>
           {`${ticketModality.ticket} ${
-            ticketModality.hotel && ticketModality.ticket === "Presencial"
-              ? "+ Com Hotel"
-              : ticketModality.ticket === "Presencial" &&
-                ticketModality.hotel === false
-              ? "+ Sem Hotel"
-              : ""
+            ticketModality.hotel && ticketModality.ticket === "Presencial" ? "+ Com Hotel" : ticketModality.ticket === "Presencial"  && ticketModality.hotel === false ? "+ Sem Hotel" : ""
           }`}
           <h2>{`R$ ${ticketModality.price}`}</h2>
         </TicketHolder>
