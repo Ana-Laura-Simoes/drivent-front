@@ -41,8 +41,7 @@ export default function Payment() {
         data.length || setPaymentData(data);
       })
       .catch((err) =>
-        /* eslint-disable-next-line no-console */
-        console.log(err)
+      toast("Não foi possível carregar seus pagamentos anteriores")
       );
   }, []);
 
