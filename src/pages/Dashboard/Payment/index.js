@@ -25,7 +25,7 @@ export default function Payment() {
       .then((response) => {
         if (response.data) setEnrollmentFilled(true);
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.response?.data?.details) {
           for (const detail of error.response.data.details) {
             toast(detail);
@@ -41,8 +41,7 @@ export default function Payment() {
         data.length || setPaymentData(data);
       })
       .catch((err) =>
-        /* eslint-disable-next-line no-console */
-        console.log(err)
+        toast("Não foi possível carregar seus pagamentos anteriores")
       );
   }, []);
 
