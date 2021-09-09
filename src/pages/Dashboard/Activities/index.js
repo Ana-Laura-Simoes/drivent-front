@@ -1,17 +1,18 @@
+import styled from "styled-components";
 import { useEffect, useState, useContext } from "react";
 import useApi from "./../../../hooks/useApi";
+import NoActivitiesMessage from "./NoActivitiesMessage";
 import { toast } from "react-toastify";
-import DontNeedToChooseActivitiesMessage from "./DontNeedToChooseActivitiesMessage";
 
 export default function Activities() {
   const { payment } = useApi();
-  const [isAnOnlineTicket, setIsAnOnlineTicket] = useState(false);
+  const [paymentData, setPaymentData] = useState(false);
 
   useEffect(() => {
     payment
       .getPayment()
-      .then((response) => {
-        if (response.data.type === "Online") setIsAnOnlineTicket(true);
+      .then(({ data }) => {
+        data.length || setPaymentData(data);
       })
       .catch((error) => {
         if (error.response?.data?.details) {
@@ -24,9 +25,31 @@ export default function Activities() {
       });
   }, []);
 
-  if (isAnOnlineTicket) {
-    return <DontNeedToChooseActivitiesMessage />;
-  } else {
-    return "Atividades: Em breve!";
+  if (!paymentData) {
+    return (
+      <NoActivitiesMessage
+        message={
+          "Você precisa ter confirmado pagamento antes de fazer a escolha de atividades."
+        }
+      />
+    );
   }
+
+  if (paymentData.type === "Online") {
+    return (
+      <NoActivitiesMessage
+        message={
+          "Sua modalidade de ingresso não necessita escolher atividade. Você terá acesso a todas as atividades."
+        }
+      />
+    );
+  }
+
+  return <Title>Ingresso e pagamento</Title>;
 }
+
+const Title = styled.div`
+  font-size: 34px;
+  line-height: 40px;
+  color: #000000;
+`;
