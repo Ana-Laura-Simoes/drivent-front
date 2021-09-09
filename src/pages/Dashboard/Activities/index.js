@@ -1,12 +1,13 @@
-import styled from "styled-components";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import useApi from "./../../../hooks/useApi";
 import NoActivitiesMessage from "./NoActivitiesMessage";
+import ActivitiesPage from "./ActivitiesPage";
 import { toast } from "react-toastify";
 
 export default function Activities() {
   const { payment } = useApi();
   const [paymentData, setPaymentData] = useState(false);
+  const [choosenDay, setChoosenDay] = useState("2021-10-22");
 
   useEffect(() => {
     payment
@@ -45,11 +46,6 @@ export default function Activities() {
     );
   }
 
-  return <Title>Ingresso e pagamento</Title>;
+  return <ActivitiesPage day={choosenDay}/>;
 }
 
-const Title = styled.div`
-  font-size: 34px;
-  line-height: 40px;
-  color: #000000;
-`;
