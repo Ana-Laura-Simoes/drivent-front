@@ -1,17 +1,17 @@
 import AuthenticatedApi from "./AuthenticatedApi";
 import api from "./api";
 
-export default class PaymentApi extends AuthenticatedApi {
+export default class UserActivitiesApi extends AuthenticatedApi {
   save(body) {
-    return api.post("/payment", body, {
+    return api.post("/userActivities", body, {
       headers: {
         ...this.getAuthorizationHeader()
       }
     });
   }
 
-  getPayment() {
-    return api.get("/payment", {
+  getUserActivities(id) {
+    return api.get(`/userActivities/${id}`, {
       headers: {
         ...this.getAuthorizationHeader()
       }
