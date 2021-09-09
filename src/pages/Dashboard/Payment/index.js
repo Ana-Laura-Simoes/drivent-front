@@ -16,11 +16,11 @@ export default function Payment() {
     price: 0,
   });
   
-  function calculateTotal() {
+  /*function calculateTotal() {
     if(ticketModality.ticket==="Presencial"&& ticketModality.hotel) return prices.principal+prices.hotel;
     if(ticketModality.ticket==="Presencial") return prices.principal;
     return prices.online;
-  }
+  }*/
 
   const prices = { principal: 250, online: 100, hotel: 350 };
 

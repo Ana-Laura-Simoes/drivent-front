@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import useApi from "./../../../hooks/useApi";
 import { toast } from "react-toastify";
 import DontNeedToChooseActivitiesMessage from "./DontNeedToChooseActivitiesMessage";
