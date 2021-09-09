@@ -46,6 +46,6 @@ export default function Activities() {
     );
   }
 
-  return <ActivitiesPage day={choosenDay}/>;
+  return <ActivitiesPage day={choosenDay} setChoosenDay={setChoosenDay} />;
 }
 

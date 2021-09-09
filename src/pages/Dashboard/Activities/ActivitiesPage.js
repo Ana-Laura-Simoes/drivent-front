@@ -4,8 +4,9 @@ import useApi from "./../../../hooks/useApi";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import { BsBoxArrowInRight } from "react-icons/bs";
+import ShowActivitiesByDay from "./ShowActivitiesByDay";
 
-export default function ActivitiesPage({ day }) {
+export default function ActivitiesPage({ day, setChoosenDay }) {
   const { activity, location } = useApi();
   const [activities, setActivities] = useState([]);
   const [locations, setLocations] = useState([]);
@@ -39,7 +40,7 @@ export default function ActivitiesPage({ day }) {
           toast("Não foi possível carregar as atividades");
         }
       });
-  }, []);
+  }, [day]);
 
   locations.forEach((l) => {
     let locationActivities=[];
@@ -50,7 +51,8 @@ export default function ActivitiesPage({ day }) {
     });
   return (
    <>
-  <Title>Ingresso e pagamento</Title>
+  <Title>Escolha a sua atividade</Title>
+  <ShowActivitiesByDay day={day} setChoosenDay={setChoosenDay} />
    <Container>
      {
        locations.map((l) => (
