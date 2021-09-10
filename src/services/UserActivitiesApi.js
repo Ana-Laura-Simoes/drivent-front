@@ -2,7 +2,7 @@ import AuthenticatedApi from "./AuthenticatedApi";
 import api from "./api";
 
 export default class UserActivitiesApi extends AuthenticatedApi {
-  save(body) {
+  registerUserActivity(body) {
     return api.post("/userActivities", body, {
       headers: {
         ...this.getAuthorizationHeader()

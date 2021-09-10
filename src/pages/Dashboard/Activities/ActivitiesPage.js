@@ -1,16 +1,27 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import useApi from "./../../../hooks/useApi";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import { BsBoxArrowInRight } from "react-icons/bs";
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import { FaRegCheckCircle } from "react-icons/fa";
 import ShowActivitiesByDay from "./ShowActivitiesByDay";
+import UserContext from "../../../contexts/UserContext";
 
 export default function ActivitiesPage({ day, setChoosenDay }) {
-  const { activity, location } = useApi();
+  const { activity, location, userActivities } = useApi();
   const [activities, setActivities] = useState([]);
   const [locations, setLocations] = useState([]);
+  const [userActivitiesArray, setUserActivitiesArray] = useState([]);
+  const id = useContext(UserContext).userData.user.id;
+
+  function findUserActivities(e) {
+    for (let i = 0; i < userActivitiesArray.length; i++) {
+      if (e.id === userActivitiesArray[i].activityId) return true;
+    }
+    return false;
+  }
 
   useEffect(() => {
     location
@@ -27,6 +38,7 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
           toast("Não foi possível carregar os locais");
         }
       });
+
     activity
       .getActivitiesByDay(day)
       .then(({ data }) => {
@@ -41,6 +53,21 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
           toast("Não foi possível carregar as atividades");
         }
       });
+
+    userActivities
+      .getUserActivities(id)
+      .then(({ data }) => {
+        setUserActivitiesArray(data);
+      })
+      .catch((error) => {
+        if (error.response?.data?.details) {
+          for (const detail of error.response.data.details) {
+            toast(detail);
+          }
+        } else {
+          toast("Ocorreu um erro. Por favor, tente novamente");
+        }
+      });
   }, [day]);
 
   locations.forEach((l) => {
@@ -50,6 +77,7 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
     });
     l.activities = locationActivities;
   });
+
   return (
     <>
       <Title>Escolha a sua atividade</Title>
@@ -61,8 +89,9 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
             <div className="container">
               {l.activities.map((a, index) => (
                 <ActivityBox
+                  checkBackground={findUserActivities(a)}
                   key={index}
-                  hours={dayjs(a.endTime).hour() - dayjs(a.beginTime).hour()}
+                  hours={(dayjs(a.endTime) - dayjs(a.beginTime)) / 3600000}
                 >
                   <div className="info">
                     <span>
@@ -75,18 +104,31 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
                   </div>
 
                   <Register>
-                    {a.maxInscriptions - a.inscriptions > 0 ? (
+                    {findUserActivities(a) ? (
+                      <>
+                        <FaRegCheckCircle
+                          onClick={() => console.log("Inscrito")}
+                          className="registerOption"
+                        />
+                        <h2>Inscrito</h2>
+                      </>
+                    ) : a.maxInscriptions - a.inscriptions > 0 ? (
                       <>
                         <BsBoxArrowInRight
-                          onClick={() => console.log(a)}
+                          onClick={() =>
+                            userActivities.registerUserActivity({ id, activity: a })
+                          }
                           className="registerOption"
                         />
                         <h2>{a.maxInscriptions - a.inscriptions} vagas</h2>
                       </>
                     ) : (
                       <>
-                      <IoIosCloseCircleOutline className="fullOcupations"/>
-                      Esgotado
+                        <IoIosCloseCircleOutline
+                          onClick={() => console.log("Cheio")}
+                          className="fullOcupations"
+                        />
+                        Esgotado
                       </>
                     )}
                   </Register>
@@ -143,7 +185,8 @@ const ActivityBox = styled.div`
   display: flex;
   justify-content: space-between;
   height: ${(props) => `${80 * props.hours}px`};
-  background: #f1f1f1;
+  background-color: ${(props) =>
+    props.checkBackground ? "#D0FFDB" : "#F1F1F1"};
   border-radius: 5px;
   margin-bottom: 10px;
   padding: 10px;
@@ -172,21 +215,22 @@ const Register = styled.div`
   justify-content: center;
   flex-direction: column;
   border-left: 1px solid #cfcfcf;
-  color: #CC6666;
-  font-size:9px;
+  color: #cc6666;
+  font-size: 9px;
+
+  svg {
+    font-size: 25px;
+  }
 
   h2 {
     color: #078632;
-    font-size: 9px;
   }
 
   .registerOption {
     color: #078632;
-    font-size: 25px;
   }
-  
-  .fullOcupations{
-    color: #CC6666;
-    font-size: 25px;
+
+  .fullOcupations {
+    color: #cc6666;
   }
 `;
