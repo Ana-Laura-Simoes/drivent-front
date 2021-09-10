@@ -30,7 +30,7 @@ export default function ShowActivitiesByDay({ choosenDay, setChoosenDay }) {
   function handleClick(i, a) {
     setSelected(i);
     let day;
-    day = dayjs(a.beginTime).format("YYYY-MM-DD");   
+    day = dayjs(a).format("YYYY-MM-DD");   
     setChoosenDay(day);
   }
 
@@ -45,11 +45,11 @@ export default function ShowActivitiesByDay({ choosenDay, setChoosenDay }) {
           onClick={() => handleClick(i, a)}
         >
           <div>
-            {dayjs(a.beginTime)
+            {dayjs(a)
               .locale("pt")
               .format("dddd")
               .replace("-feira", "")}
-            , {dayjs(a.beginTime).format("DD/MM")}
+            , {dayjs(a).format("DD/MM")}
           </div>
         </Day>
       ))}
