@@ -15,6 +15,7 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
   const [locations, setLocations] = useState([]);
   const [userActivitiesArray, setUserActivitiesArray] = useState([]);
   const id = useContext(UserContext).userData.user.id;
+  console.log(userActivitiesArray);
 
   function findUserActivities(e) {
     for (let i = 0; i < userActivitiesArray.length; i++) {
@@ -78,7 +79,7 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
     updateLocation();
     updateAllActivities();
     updateUserActivities();
-  }, [day, userActivitiesArray]);
+  }, [day]);
 
   locations.forEach((l) => {
     let locationActivities = [];
@@ -120,7 +121,10 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
                           onClick={() => {
                             userActivities
                               .deleteUserActivity({ id, activityId: a.id })
-                              .then()
+                              .then(() => {
+                                updateAllActivities();
+                                updateUserActivities();
+                              })
                               .catch(() => {
                                 toast(
                                   "Ocorreu um erro. Por favor, tente novamente mais tarde."
@@ -137,7 +141,10 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
                           onClick={() =>
                             userActivities
                               .registerUserActivity({ id, activity: a })
-                              .then()
+                              .then(() => {
+                                updateAllActivities();
+                                updateUserActivities();
+                              })
                               .catch(() => {
                                 toast(
                                   "Você já está inscrito numa atividade neste horário."
@@ -148,7 +155,8 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
                         />
                         <h2>{a.maxInscriptions - a.inscriptions} vagas</h2>
                       </>
-                    ) : !findUserActivities(a) && a.maxInscriptions - a.inscriptions === 0 ? (
+                    ) : !findUserActivities(a) &&
+                      a.maxInscriptions - a.inscriptions === 0 ? (
                       <>
                         <IoIosCloseCircleOutline
                           onClick={() => {
@@ -160,7 +168,9 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
                         />
                         Esgotado
                       </>
-                    ) : ""}
+                    ) : (
+                      ""
+                    )}
                   </Register>
                 </ActivityBox>
               ))}
