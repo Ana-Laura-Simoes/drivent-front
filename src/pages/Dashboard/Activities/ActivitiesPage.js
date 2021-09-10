@@ -23,6 +23,40 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
     return false;
   }
 
+  function updateLocation() {
+    location
+      .getLocations()
+      .then(({ data }) => {
+        setLocations(data);
+      })
+      .catch((error) => {
+        if (error.response?.data?.details) {
+          for (const detail of error.response.data.details) {
+            toast(detail);
+          }
+        } else {
+          toast("Não foi possível carregar os locais");
+        }
+      });
+  }
+
+  function updateAllActivities() {
+    activity
+      .getActivitiesByDay(day)
+      .then(({ data }) => {
+        setActivities(data);
+      })
+      .catch((error) => {
+        if (error.response?.data?.details) {
+          for (const detail of error.response.data.details) {
+            toast(detail);
+          }
+        } else {
+          toast("Não foi possível carregar as atividades");
+        }
+      });
+  }
+
   function updateUserActivities() {
     userActivities
       .getUserActivities(id)
@@ -41,38 +75,10 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
   }
 
   useEffect(() => {
-    location
-      .getLocations()
-      .then(({ data }) => {
-        setLocations(data);
-      })
-      .catch((error) => {
-        if (error.response?.data?.details) {
-          for (const detail of error.response.data.details) {
-            toast(detail);
-          }
-        } else {
-          toast("Não foi possível carregar os locais");
-        }
-      });
-
-    activity
-      .getActivitiesByDay(day)
-      .then(({ data }) => {
-        setActivities(data);
-      })
-      .catch((error) => {
-        if (error.response?.data?.details) {
-          for (const detail of error.response.data.details) {
-            toast(detail);
-          }
-        } else {
-          toast("Não foi possível carregar as atividades");
-        }
-      });
-
+    updateLocation();
+    updateAllActivities();
     updateUserActivities();
-  }, [day]);
+  }, [day, userActivitiesArray]);
 
   locations.forEach((l) => {
     let locationActivities = [];
@@ -110,7 +116,19 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
                   <Register>
                     {findUserActivities(a) ? (
                       <>
-                        <FaRegCheckCircle className="registerOption" />
+                        <FaRegCheckCircle
+                          onClick={() => {
+                            userActivities
+                              .deleteUserActivity({ id, activityId: a.id })
+                              .then()
+                              .catch(() => {
+                                toast(
+                                  "Ocorreu um erro. Por favor, tente novamente mais tarde."
+                                );
+                              });
+                          }}
+                          className="registerOption"
+                        />
                         <h2>Inscrito</h2>
                       </>
                     ) : a.maxInscriptions - a.inscriptions > 0 ? (
@@ -119,7 +137,7 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
                           onClick={() =>
                             userActivities
                               .registerUserActivity({ id, activity: a })
-                              .then(updateUserActivities)
+                              .then()
                               .catch(() => {
                                 toast(
                                   "Você já está inscrito numa atividade neste horário."
@@ -132,7 +150,14 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
                       </>
                     ) : (
                       <>
-                        <IoIosCloseCircleOutline className="fullOcupations" />
+                        <IoIosCloseCircleOutline
+                          onClick={() => {
+                            toast(
+                              "As vagas para esta atividade estão esgotadas!"
+                            );
+                          }}
+                          className="fullOcupations"
+                        />
                         Esgotado
                       </>
                     )}
