@@ -15,7 +15,6 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
   const [locations, setLocations] = useState([]);
   const [userActivitiesArray, setUserActivitiesArray] = useState([]);
   const id = useContext(UserContext).userData.user.id;
-  console.log(userActivitiesArray);
 
   function findUserActivities(e) {
     for (let i = 0; i < userActivitiesArray.length; i++) {
