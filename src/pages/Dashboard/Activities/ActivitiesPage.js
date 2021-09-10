@@ -10,7 +10,7 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
   const { activity, location } = useApi();
   const [activities, setActivities] = useState([]);
   const [locations, setLocations] = useState([]);
-
+  console.log(activities);
   useEffect(() => {
    location
     .getLocations()
@@ -119,6 +119,7 @@ border-radius: 2px;
 width:100%;
 height:100%;
 padding:10px;
+overflow-y: scroll;
 }
 `;
 
