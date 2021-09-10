@@ -2,19 +2,27 @@ import AuthenticatedApi from "./AuthenticatedApi";
 import api from "./api";
 
 export default class UserActivitiesApi extends AuthenticatedApi {
-  save(body) {
+  registerUserActivity(body) {
     return api.post("/userActivities", body, {
       headers: {
-        ...this.getAuthorizationHeader()
-      }
+        ...this.getAuthorizationHeader(),
+      },
     });
   }
 
   getUserActivities(id) {
     return api.get(`/userActivities/${id}`, {
       headers: {
-        ...this.getAuthorizationHeader()
-      }
+        ...this.getAuthorizationHeader(),
+      },
+    });
+  }
+
+  deleteUserActivity(body) {
+    return api.post("/userActivities/delete", body, {
+      headers: {
+        ...this.getAuthorizationHeader(),
+      },
     });
   }
 }

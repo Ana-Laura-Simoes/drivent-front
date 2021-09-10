@@ -14,6 +14,7 @@ export default function ChosenHotel({ roomId, relocate, hotels }) {
       hotels.forEach(h => {
         if(h.id===data.hotelId) {
           userRoom.hotel = h.name;
+          userRoom.image = h.image;
         }
       });
       setCurrentRoom(userRoom);
@@ -33,9 +34,9 @@ export default function ChosenHotel({ roomId, relocate, hotels }) {
       <Title>Escolha de hotel e quarto</Title>
       <SubTitle>Você já escolheu seu quarto:</SubTitle>
       <Wrapper>
-        <img src={"https://upload.wikimedia.org/wikipedia/commons/7/79/Ponta_Negra_Beach_Hotel.jpg"} alt="hotel"></img>
-        {currentRoom?
+      {currentRoom?
           <>
+            <img src={currentRoom.image} alt="hotel"></img>
             <Name>{currentRoom.hotel}</Name>
             <Info>Quarto reservado</Info>
             <Status>{currentRoom.type}</Status>
@@ -47,9 +48,8 @@ export default function ChosenHotel({ roomId, relocate, hotels }) {
           </>:
           ""
         }
-
       </Wrapper>
-      <Button onClick={() => relocate()}>RESERVAR QUARTO</Button>
+      <Button onClick={() => relocate()}>TROCAR QUARTO</Button>
     </>
   );
 }
