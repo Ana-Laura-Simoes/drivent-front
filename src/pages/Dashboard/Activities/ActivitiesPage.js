@@ -148,7 +148,7 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
                         />
                         <h2>{a.maxInscriptions - a.inscriptions} vagas</h2>
                       </>
-                    ) : (
+                    ) : !findUserActivities(a) && a.maxInscriptions - a.inscriptions === 0 ? (
                       <>
                         <IoIosCloseCircleOutline
                           onClick={() => {
@@ -160,7 +160,7 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
                         />
                         Esgotado
                       </>
-                    )}
+                    ) : ""}
                   </Register>
                 </ActivityBox>
               ))}
