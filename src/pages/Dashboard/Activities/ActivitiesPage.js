@@ -23,6 +23,23 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
     return false;
   }
 
+  function updateUserActivities() {
+    userActivities
+      .getUserActivities(id)
+      .then(({ data }) => {
+        setUserActivitiesArray(data);
+      })
+      .catch((error) => {
+        if (error.response?.data?.details) {
+          for (const detail of error.response.data.details) {
+            toast(detail);
+          }
+        } else {
+          toast("Ocorreu um erro. Por favor, tente novamente");
+        }
+      });
+  }
+
   useEffect(() => {
     location
       .getLocations()
@@ -54,20 +71,7 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
         }
       });
 
-    userActivities
-      .getUserActivities(id)
-      .then(({ data }) => {
-        setUserActivitiesArray(data);
-      })
-      .catch((error) => {
-        if (error.response?.data?.details) {
-          for (const detail of error.response.data.details) {
-            toast(detail);
-          }
-        } else {
-          toast("Ocorreu um erro. Por favor, tente novamente");
-        }
-      });
+    updateUserActivities();
   }, [day]);
 
   locations.forEach((l) => {
@@ -106,17 +110,21 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
                   <Register>
                     {findUserActivities(a) ? (
                       <>
-                        <FaRegCheckCircle
-                          onClick={() => console.log("Inscrito")}
-                          className="registerOption"
-                        />
+                        <FaRegCheckCircle className="registerOption" />
                         <h2>Inscrito</h2>
                       </>
                     ) : a.maxInscriptions - a.inscriptions > 0 ? (
                       <>
                         <BsBoxArrowInRight
                           onClick={() =>
-                            userActivities.registerUserActivity({ id, activity: a })
+                            userActivities
+                              .registerUserActivity({ id, activity: a })
+                              .then(updateUserActivities)
+                              .catch(() => {
+                                toast(
+                                  "Você já está inscrito numa atividade neste horário."
+                                );
+                              })
                           }
                           className="registerOption"
                         />
@@ -124,10 +132,7 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
                       </>
                     ) : (
                       <>
-                        <IoIosCloseCircleOutline
-                          onClick={() => console.log("Cheio")}
-                          className="fullOcupations"
-                        />
+                        <IoIosCloseCircleOutline className="fullOcupations" />
                         Esgotado
                       </>
                     )}
