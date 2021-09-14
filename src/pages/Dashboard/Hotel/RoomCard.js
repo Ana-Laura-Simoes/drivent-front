@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { IoPersonSharp, IoPersonOutline } from "react-icons/io5";
+import { toast } from "react-toastify";
 
 export default function RoomCard({ id, number, max, available, selected, changeSelected }) {
   function renderPerson(quantity, ocupied, selected) {
@@ -19,7 +20,7 @@ export default function RoomCard({ id, number, max, available, selected, changeS
   }
 
   function verifyIfNotFull() {
-    available?changeSelected(id):alert("Quarto lotado");
+    available?changeSelected(id):toast("Este quarto está lotado");
   }
 
   return (

@@ -139,7 +139,9 @@ export default function PersonalInformationForm() {
 
   return (
     <>
-      <StyledTypography variant="h4">Suas Informações</StyledTypography>
+      <StyledTypography variant="h4">
+        Suas Informações
+      </StyledTypography>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <FormWrapper onSubmit={handleSubmit}>
           <InputWrapper>
