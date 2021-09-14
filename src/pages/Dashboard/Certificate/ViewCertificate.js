@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
-import useApi from "./../../../hooks/useApi";
-import { toast } from "react-toastify";
+import { useState } from "react";
 import UnavailableMessage from "./UnavailableMessage";
 
 export default function ViewCertificate() {

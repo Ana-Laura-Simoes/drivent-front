@@ -3,17 +3,22 @@ import useApi from "./../../../hooks/useApi";
 import NoActivitiesMessage from "./NoActivitiesMessage";
 import ActivitiesPage from "./ActivitiesPage";
 import { toast } from "react-toastify";
+import styled from "styled-components";
+import Loader from "react-loader-spinner";
 
 export default function Activities() {
+  const [loading, setLoading] = useState(false);
   const { payment } = useApi();
   const [paymentData, setPaymentData] = useState(false);
   const [choosenDay, setChoosenDay] = useState("2021-10-22");
 
   useEffect(() => {
+    setLoading(true);
     payment
       .getPayment()
       .then(({ data }) => {
         data.length || setPaymentData(data);
+        setLoading(false);
       })
       .catch((error) => {
         if (error.response?.data?.details) {
@@ -25,6 +30,20 @@ export default function Activities() {
         }
       });
   }, []);
+
+  if(loading) {
+    return( 
+    <Grid>     
+    <Loader
+      type="Oval"
+      color="#E0E0E0"
+      height={100}
+      width={100}
+    />
+    <span>Carregando</span>
+    </Grid>
+    );
+  }
 
   if (!paymentData) {
     return (
@@ -49,3 +68,18 @@ export default function Activities() {
   return <ActivitiesPage day={choosenDay} setChoosenDay={setChoosenDay} />;
 }
 
+const Grid = styled.div`
+  width:100%;
+  height:100%;
+  display: flex;
+  flex-direction: column ;
+  align-items: center;
+  justify-content: center;
+
+  span{
+  font-size: 17px;
+  line-height: 20px;
+  text-align: center;
+  color: #7B7B7B;
+  }
+`;
