@@ -40,7 +40,7 @@ export default function Hotel() {
     hotel
     .getHotels()
     .then(({ data: hotels }) => {
-      hotels.forEach(h => {
+      hotels.forEach((h, index) => {
         const types = {};
         let totalAvailable = 0;
         h.rooms.forEach(r => {
@@ -50,7 +50,7 @@ export default function Hotel() {
         });
         h.totalAvailable = totalAvailable;
         h.types=Object.keys(types);
-        h.selected=false;
+        h.selected=currentHotel===index?true:false;
       });
       setHotels(hotels);
     })
