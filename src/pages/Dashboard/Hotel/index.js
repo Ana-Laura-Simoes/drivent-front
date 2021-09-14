@@ -15,7 +15,7 @@ export default function Hotel() {
   const [hotels, setHotels] = useState([]);
   const [currentHotel, setCurrentHotel] = useState("none");
   const [currentRoom, setCurrentRoom] = useState("none");
-  console.log("current room", currentRoom);
+
   useEffect(() => {
     payment.getPayment().then(({ data }) => {
       data.length||setCurrentUser(data);
@@ -52,7 +52,6 @@ export default function Hotel() {
         h.types=Object.keys(types);
         h.selected=false;
       });
-      console.log("hotels updated", hotels);
       setHotels(hotels);
     })
     .catch(error => {
