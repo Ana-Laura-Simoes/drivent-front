@@ -8,6 +8,7 @@ import { IoIosCloseCircleOutline } from "react-icons/io";
 import { FaRegCheckCircle } from "react-icons/fa";
 import ShowActivitiesByDay from "./ShowActivitiesByDay";
 import UserContext from "../../../contexts/UserContext";
+import useInterval from "use-interval";
 
 export default function ActivitiesPage({ day, setChoosenDay }) {
   const { activity, location, userActivities } = useApi();
@@ -15,7 +16,6 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
   const [locations, setLocations] = useState([]);
   const [userActivitiesArray, setUserActivitiesArray] = useState([]);
   const id = useContext(UserContext).userData.user.id;
-  console.log(userActivitiesArray);
 
   function findUserActivities(e) {
     for (let i = 0; i < userActivitiesArray.length; i++) {
@@ -80,6 +80,12 @@ export default function ActivitiesPage({ day, setChoosenDay }) {
     updateAllActivities();
     updateUserActivities();
   }, [day]);
+
+  useInterval(() => {
+    updateLocation();
+    updateAllActivities();
+    updateUserActivities();
+   }, 3000);
 
   locations.forEach((l) => {
     let locationActivities = [];
@@ -218,6 +224,7 @@ const Location = styled.div`
     width: 100%;
     height: 100%;
     padding: 10px;
+    overflow-x: scroll;
   }
 `;
 

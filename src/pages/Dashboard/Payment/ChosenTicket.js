@@ -5,7 +5,7 @@ import { IoCheckmarkCircleSharp } from "react-icons/io5";
 import useApi from "../../../hooks/useApi";
 
 export default function ChosenTicket({ ticketModality }) {
-  const [paid, setPaid] = useState(false);
+  const [paid, setPaid] = useState(ticketModality.paid);
   const { payment } = useApi();
   
   return (
