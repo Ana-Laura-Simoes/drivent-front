@@ -5,8 +5,11 @@ import useApi from "./../../../hooks/useApi";
 import ModalityBox from "./ModalityBox";
 import UnfilledEnrollmentMessage from "./UnfilledEnrollmentMessage";
 import { toast } from "react-toastify";
+import Loading from "../Styles/Loading";
 
 export default function Payment() {
+  const [loading, setLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("");
   const { enrollment, payment } = useApi();
   const [enrollmentFilled, setEnrollmentFilled] = useState(false);
   const [paymentData, setPaymentData] = useState(false);
@@ -20,12 +23,15 @@ export default function Payment() {
   const prices = { principal: 250, online: 100, hotel: 350 };
 
   useEffect(() => {
+    setLoading(true);
+    setLoadingMessage("Carregando");
     enrollment
       .getPersonalInformations()
       .then((response) => {
         if (response.data) setEnrollmentFilled(true);
       })
       .catch((error) => {
+        setLoadingMessage("Não foi possível carregar a página");
         if (error.response?.data?.details) {
           for (const detail of error.response.data.details) {
             toast(detail);
@@ -39,12 +45,20 @@ export default function Payment() {
       .getPayment()
       .then(({ data }) => {
         data.length || setPaymentData(data);
+        setLoading(false);
       })
       .catch((err) =>
-        toast("Não foi possível carregar seus pagamentos anteriores")
+        toast("Não foi possível carregar seus pagamentos anteriores"),
+        setLoadingMessage("Não foi possível carregar a página")
       );
   }, []);
 
+  if(loading) {
+    return( 
+    <Loading loadingMessage={loadingMessage}/>
+    );
+  }
+  
   if (paymentData) {
     return (
       <ChosenTicket

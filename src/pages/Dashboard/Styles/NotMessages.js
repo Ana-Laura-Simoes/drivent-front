@@ -1,6 +1,16 @@
 import styled from "styled-components";
 
-export const Wrapper = styled.div`
+export default function NotMessages({ message }) {
+  return (
+    <Wrapper>
+      <Message>
+        <span>{message}</span>
+      </Message>
+    </Wrapper>
+  );
+}
+
+const Wrapper = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
@@ -12,7 +22,7 @@ export const Wrapper = styled.div`
   }
 `;
 
-export const Message = styled.div`
+const Message = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
