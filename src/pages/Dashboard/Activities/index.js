@@ -26,8 +26,6 @@ export default function Activities() {
       });
   }, []);
 
-
-
   if (!paymentData) {
     return (
       <NoActivitiesMessage
