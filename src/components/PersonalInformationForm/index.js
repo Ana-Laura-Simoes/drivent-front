@@ -144,7 +144,7 @@ export default function PersonalInformationForm() {
   return (
     <>
       <StyledTypography variant="h4">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvajLGrWv_mrzhoJ8Jc7bNiGIAowY-X8aUzA&usqp=CAU"/>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvajLGrWv_mrzhoJ8Jc7bNiGIAowY-X8aUzA&usqp=CAU" alt="profile"/>
         Suas Informações
       </StyledTypography>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
