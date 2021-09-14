@@ -31,7 +31,8 @@ export default function Payment() {
         if (response.data) setEnrollmentFilled(true);
       })
       .catch((error) => {
-        setLoadingMessage("Não foi possível carregar a página");
+        console.log(error);
+        //setLoadingMessage("Não foi possível carregar a página");
         if (error.response?.data?.details) {
           for (const detail of error.response.data.details) {
             toast(detail);
@@ -47,9 +48,10 @@ export default function Payment() {
         data.length || setPaymentData(data);
         setLoading(false);
       })
-      .catch((err) =>
-        toast("Não foi possível carregar seus pagamentos anteriores"),
-        setLoadingMessage("Não foi possível carregar a página")
+      .catch((err) => {
+        toast("Não foi possível carregar seus pagamentos anteriores");
+        setLoadingMessage("Não foi possível carregar a página");
+      }
       );
   }, []);
 
