@@ -18,13 +18,15 @@ export default function Activities() {
       .catch((error) => {
         if (error.response?.data?.details) {
           for (const detail of error.response.data.details) {
-            toast(detail);
+          toast(detail);
           }
         } else {
           toast("Não foi possível carregar");
         }
       });
   }, []);
+
+
 
   if (!paymentData) {
     return (
