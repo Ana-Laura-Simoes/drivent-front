@@ -31,8 +31,6 @@ export default function Payment() {
         if (response.data) setEnrollmentFilled(true);
       })
       .catch((error) => {
-        console.log(error);
-        //setLoadingMessage("Não foi possível carregar a página");
         if (error.response?.data?.details) {
           for (const detail of error.response.data.details) {
             toast(detail);
