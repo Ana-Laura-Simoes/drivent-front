@@ -137,6 +137,10 @@ export default function PersonalInformationForm() {
     }
   };
 
+  function uploadImage() {
+    console.log("em breve");
+  }
+
   return (
     <>
       <StyledTypography variant="h4">
@@ -274,7 +278,7 @@ export default function PersonalInformationForm() {
               onChange={handleChange("addressDetail")}
             />
           </InputWrapper>
-          <Button>
+          <Button onClick={() => uploadImage()}>
             Upload Image
           </Button>
           
