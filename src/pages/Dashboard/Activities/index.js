@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useApi from "./../../../hooks/useApi";
-import NotMessages from "../Styles/NotMessages";
+import UnavaibleMessage from "../Styles/UnavailableMessage.js";
 import ActivitiesPage from "./ActivitiesPage";
 import Loading from "../Styles/Loading";
 import { toast } from "react-toastify";
@@ -41,7 +41,7 @@ export default function Activities() {
 
   if (!paymentData) {
     return (
-      <NotMessages
+      <UnavaibleMessage
         message={
           "Você precisa ter confirmado pagamento antes de fazer a escolha de atividades."
         }
@@ -51,7 +51,7 @@ export default function Activities() {
 
   if (paymentData.type === "Online") {
     return (
-      <NotMessages
+      <UnavaibleMessage
         message={
           "Sua modalidade de ingresso não necessita escolher atividade. Você terá acesso a todas as atividades."
         }

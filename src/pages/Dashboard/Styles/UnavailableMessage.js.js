@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export default function NotMessages({ message }) {
+export default function UnavaibleMessage({ message }) {
   return (
     <Wrapper>
       <Message>

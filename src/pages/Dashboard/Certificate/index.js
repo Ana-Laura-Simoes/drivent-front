@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useApi from "./../../../hooks/useApi";
-import NotMessages from "../Styles/NotMessages";
+import UnavaibleMessage from "../Styles/UnavailableMessage.js";
 import ViewCertificate from "./ViewCertificate";
 import { toast } from "react-toastify";
 import Loading from "../Styles/Loading";
@@ -40,7 +40,7 @@ export default function Certificate() {
 
   if (!paymentData) {
     return (
-      <NotMessages
+      <UnavaibleMessage
         message={
           "Você precisa ter confirmado pagamento antes de visualizar seus certificados."
         }
