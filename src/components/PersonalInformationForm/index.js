@@ -137,9 +137,14 @@ export default function PersonalInformationForm() {
     }
   };
 
+  function uploadImage() {
+    console.log("em breve");
+  }
+
   return (
     <>
       <StyledTypography variant="h4">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvajLGrWv_mrzhoJ8Jc7bNiGIAowY-X8aUzA&usqp=CAU" alt="profile"/>
         Suas Informações
       </StyledTypography>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -273,6 +278,9 @@ export default function PersonalInformationForm() {
               onChange={handleChange("addressDetail")}
             />
           </InputWrapper>
+          <Button onClick={() => uploadImage()}>
+            Upload Image
+          </Button>
           
           <SubmitContainer>
             <Button type="submit" disabled={dynamicInputIsLoading}>
