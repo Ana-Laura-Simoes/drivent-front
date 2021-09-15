@@ -25,6 +25,7 @@ export default function Hotel() {
     payment.getPayment().then(({ data }) => {
       data.length||setCurrentUser(data);
       data.roomId&&setAlreadyBooked(true);
+      setLoading(false);
     }).catch(error => {
       if (error.response?.data?.details) {
         setLoadingMessage("Não foi possível carregar a página");
