@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import UserContext from "../../contexts/UserContext";
 import styled from "styled-components";
 import DateFnsUtils from "@date-io/date-fns";
 import Typography from "@material-ui/core/Typography";
@@ -10,6 +11,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FileInputComponent from "react-file-input-previews-base64";
 
 import useApi from "../../hooks/useApi";
+import UserImageApi from "../../services/UserImageApi";
 import { useForm } from "../../hooks/useForm";
 
 import Input from "../Form/Input";
@@ -26,7 +28,9 @@ dayjs.extend(CustomParseFormat);
 
 export default function PersonalInformationForm() {
   const [dynamicInputIsLoading, setDynamicInputIsLoading] = useState(false);
+  const [userImage, setUserImage] = useState("");
   const { enrollment, cep } = useApi();
+  const id = useContext(UserContext).userData.user.id;
 
   const {
     handleSubmit,
@@ -91,6 +95,8 @@ export default function PersonalInformationForm() {
   });
 
   useEffect(() => {
+    updateUserPicture();
+
     enrollment.getPersonalInformations().then((response) => {
       if (response.status !== 200) {
         return;
@@ -143,17 +149,25 @@ export default function PersonalInformationForm() {
     }
   }
 
-  function uploadImage() {
-    console.log("em breve");
+  function uploadImage(id, image) {
+    const body = {
+      id,
+      image,
+    };
+
+    UserImageApi.setImage(body).then(updateUserPicture);
+  }
+
+  async function updateUserPicture() {
+    return await UserImageApi.getImage(id).then((response) => {
+      setUserImage(response.data);
+    });
   }
 
   return (
     <>
       <StyledTypography variant="h4">
-        <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvajLGrWv_mrzhoJ8Jc7bNiGIAowY-X8aUzA&usqp=CAU"
-          alt="profile"
-        />
+        <img src={userImage} alt="profile" />
         Suas Informações
       </StyledTypography>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -300,7 +314,7 @@ export default function PersonalInformationForm() {
               labelStyle={{ fontSize: 14 }}
               multiple={false}
               callbackFunction={(file) => {
-                console.log(file.base64);
+                uploadImage(id, file.base64);
               }}
               accept="image/*"
             />

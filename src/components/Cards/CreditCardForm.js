@@ -2,7 +2,6 @@ import React from "react";
 import Cards from "react-credit-cards";
 import "react-credit-cards/es/styles-compiled.css";
 import UserContext from "../../contexts/UserContext";
-//import PaymentApi from "../../services/PaymentApi";
 import { toast } from "react-toastify";
 import InputMask from "react-input-mask";
 
