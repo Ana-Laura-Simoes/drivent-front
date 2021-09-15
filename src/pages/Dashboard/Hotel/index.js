@@ -6,9 +6,12 @@ import HotelCard from "./HotelCard";
 import RoomCard from "./RoomCard";
 import MissingSteps from "./MissingSteps";
 import ChosenHotel from "./ChosenHotel";
+import Loading from "../Styles/Loading";
 import useInterval from "use-interval";
 
 export default function Hotel() {
+  const [loading, setLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("");
   const { hotel, payment, room } = useApi();
   const [currentUser, setCurrentUser] = useState(false);
   const [alreadyBooked, setAlreadyBooked] = useState(false);
@@ -17,11 +20,15 @@ export default function Hotel() {
   const [currentRoom, setCurrentRoom] = useState("none");
 
   useEffect(() => {
+    setLoading(true);
+    setLoadingMessage("Carregando");
     payment.getPayment().then(({ data }) => {
       data.length||setCurrentUser(data);
       data.roomId&&setAlreadyBooked(true);
+      setLoading(false);
     }).catch(error => {
       if (error.response?.data?.details) {
+        setLoadingMessage("Não foi possível carregar a página");
         for (const detail of error.response.data.details) {
           toast(detail);
         }
@@ -131,6 +138,8 @@ export default function Hotel() {
     setAlreadyBooked(false);
   }
 
+  if(loading) { return( <Loading loadingMessage={loadingMessage}/>);
+  }
   if(!currentUser) return <MissingSteps title="Escolha de hotel e quarto" message="Você precisa ter confirmado pagamento antes de fazer a escolha de hospedagem"/>;
   if(!currentUser.hotel) return <MissingSteps title="Escolha de hotel e quarto" message="Sua modalidade de ingresso não inclui hospedagem, prossiga para a escolha de atividades"/>;
 
