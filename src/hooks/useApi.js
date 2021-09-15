@@ -10,6 +10,7 @@ import UserActivitiesApi from "../services/UserActivitiesApi";
 import ActivityApi from "../services/ActivityApi";
 import LocationApi from "../services/LocationApi";
 import ForgetPasswordApi from "../services/ForgetPasswordApi";
+import UserImageApi from "../services/UserImageApi";
 
 export default function useApi() {
   return {
@@ -25,5 +26,6 @@ export default function useApi() {
     activity: new ActivityApi(),
     location: new LocationApi(),
     forgetpassword: new ForgetPasswordApi(),
+    userImage: new UserImageApi(),
   };
 }

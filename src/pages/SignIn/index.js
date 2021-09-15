@@ -29,14 +29,9 @@ export default function SignIn() {
 
     api.auth.signIn(email, password).then(response => {
       setUserData(response.data);
-    }).catch(error => {
-      /* eslint-disable-next-line no-console */
-      console.error(error);
-      
-      if (error.response) {
-        for (const detail of error.response.data.details) {
-          toast(detail);
-        }
+    }).catch(error => {      
+      if (error.response.status===401) {
+          toast("E-mail ou senha errados!");
       } else {
         toast("Não foi possível conectar ao servidor!");
       }
