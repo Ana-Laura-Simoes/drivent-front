@@ -2,7 +2,6 @@ import React from "react";
 import Cards from "react-credit-cards";
 import "react-credit-cards/es/styles-compiled.css";
 import UserContext from "../../contexts/UserContext";
-//import PaymentApi from "../../services/PaymentApi";
 import { toast } from "react-toastify";
 import InputMask from "react-input-mask";
 
@@ -45,29 +44,40 @@ export default class PaymentForm extends React.Component {
       roomId: null,
     };
 
+    let errorArr = [];
+
     if (this.state.number.replace(/\s+/g, "").length !== 16) {
-      return toast("O número do cartão precisa ter 16 dígitos.");
+      errorArr.push("O número do cartão precisa ter 16 dígitos.");
     }
     if (this.state.name.length < 4) {
-      return toast("O nome precisa ter pelo menos 4 caracteres.");
+      errorArr.push("O nome precisa ter pelo menos 4 caracteres.");
     }
     if (
       this.state.expiry.replace("/", "").length !== 4 ||
       Number(this.state.expiry.replace("/", "").slice(0, 2)) > 12 ||
       Number(this.state.expiry.replace("/", "").slice(0, 2)) === 0
     ) {
-      return toast("Insira uma data de expiração válida.");
+      errorArr.push("Insira uma data de expiração válida.");
     }
     if (this.state.cvc.length !== 3) {
-      return toast("O CVC precisa ter 3 dígitos.");
+      errorArr.push("O CVC precisa ter 3 dígitos.");
     }
 
-    return this.props.payment.save(body)
-      .then(() => {
-        toast("Pagamento realizado com sucesso");
-        this.props.setPaid(true);
-      })
-      .catch(() => toast("Ocorreu um erro. Por favor, tente novamente!"));
+    if (errorArr.length > 0) {
+      return errorArr.forEach((e) => {
+        return toast(e);
+      });
+    }
+
+    if (errorArr.length === 0) {
+      return this.props.payment
+        .save(body)
+        .then(() => {
+          toast("Pagamento realizado com sucesso");
+          this.props.setPaid(true);
+        })
+        .catch(() => toast("Ocorreu um erro. Por favor, tente novamente!"));
+    }
   };
 
   render() {
