@@ -1,6 +1,6 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { toast } from "react-toastify";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 import AuthLayout from "../../layouts/Auth";
 
@@ -14,39 +14,55 @@ import UserContext from "../../contexts/UserContext";
 
 import useApi from "../../hooks/useApi";
 
-export default function ForgetPassword() {
+export default function NewPassword() {
   const history = useHistory();
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loadingSignIn, setLoadingSignIn] = useState(false);
-  const [sendedRequest, setSendedRequest] = useState(false);
 
   const api = useApi();
 
   const { eventInfo } = useContext(EventInfoContext);
-  const { setUserData } = useContext(UserContext);
+  const { userData } = useContext(UserContext);
+  const params = useParams();
+
+  useEffect(() => {
+    api.forgetpassword.getRecoveryInfo(params.token).then((response) => {
+      setEmail(response.data[0].email);
+    }).catch((error) => {
+      toast("Seu link de recuperação de senha expirou, tente novamente!");
+      history.push("/sign-in");
+    });
+  }, []);
 
   function submit(event) {
     event.preventDefault();
     setLoadingSignIn(true);
 
-    const body = { email };
+    const body = { email, password, confirmPassword };
+
+    if (password !== confirmPassword) {
+      toast("As senhas não coincidem!");
+      setPassword("");
+      setConfirmPassword("");
+    }
 
     api.forgetpassword
-      .getRecoveryPassword(body)
+      .setNewPassword(body)
       .then((response) => {
-        setUserData(response.data.email);
         toast(
-          "Um email foi enviado com um link temporário para a recuperação da sua senha"
+          "Sua senha foi alterada com sucesso!"
         );
-        setSendedRequest(true);
+        history.push("/sign-in");        
       })
       .catch((error) => {
         /* eslint-disable-next-line no-console */
         console.error(error);
         console.log(error.response);
 
-        if (error.response.data.message) {         
-            toast(error.response.data.message);          
+        if (error.response.data.message) {
+          toast(error.response.data.message);
         } else {
           toast("Não foi possível conectar ao servidor!");
         }
@@ -55,40 +71,28 @@ export default function ForgetPassword() {
         setLoadingSignIn(false);
       });
   }
-
   return (
-    sendedRequest ? 
-    <AuthLayout background={eventInfo.backgroundImage}>
-    <Row>
-      <img src={eventInfo.logoImage} alt="Event Logo" />
-      <Title>{eventInfo.eventTitle}</Title>
-    </Row>
-    <Row>
-      <Label>Recuperar senha</Label>
-      Link enviado com sucesso! Acesse o link enviado para
-      sua caixa de entrada (lembre-se de checar o lixo eletrônico)
-      e clique no link para ser direcionado e redefinir sua senha.     
-    </Row>
-    <Row>
-      <Link to="/enroll">Voltar para inscrição</Link>
-      <Link to="/">Voltar para login</Link>
-    </Row>
-  </AuthLayout>
-    :
     <AuthLayout background={eventInfo.backgroundImage}>
       <Row>
         <img src={eventInfo.logoImage} alt="Event Logo" />
         <Title>{eventInfo.eventTitle}</Title>
       </Row>
       <Row>
-        <Label>Recuperar senha</Label>
+        <Label>Digite aqui sua nova senha</Label>
         <form onSubmit={submit}>
           <Input
-            label="E-mail"
-            type="text"
+            label="Nova senha"
+            type="password"
             fullWidth
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Input
+            label="Confirmação da Senha"
+            type="password"
+            fullWidth
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
           <Button
             type="submit"

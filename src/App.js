@@ -9,6 +9,7 @@ import Countdown from "./pages/Countdown";
 import Enroll from "./pages/Enroll";
 import SignIn from "./pages/SignIn";
 import Dashboard from "./pages/Dashboard";
+import NewPassword from "./pages/ForgetPassword/NewPassword";
 
 import EventInfoContext, {
   EventInfoProvider,
@@ -50,6 +51,13 @@ export default function App() {
                 exact
               >
                 <ForgetPassword />
+              </ConditionalRoute> 
+
+              <ConditionalRoute                
+                path="/forgetpassword/:token"
+                exact
+              >
+                <NewPassword />
               </ConditionalRoute> 
 
               <ConditionalRoute check={ensureAuthenticated} path="/dashboard">
