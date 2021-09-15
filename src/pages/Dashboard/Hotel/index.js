@@ -7,6 +7,7 @@ import RoomCard from "./RoomCard";
 import MissingSteps from "./MissingSteps";
 import ChosenHotel from "./ChosenHotel";
 import Loading from "../Styles/Loading";
+import useInterval from "use-interval";
 
 export default function Hotel() {
   const [loading, setLoading] = useState(false);
@@ -17,7 +18,7 @@ export default function Hotel() {
   const [hotels, setHotels] = useState([]);
   const [currentHotel, setCurrentHotel] = useState("none");
   const [currentRoom, setCurrentRoom] = useState("none");
-  
+
   useEffect(() => {
     setLoading(true);
     setLoadingMessage("Carregando");
@@ -34,34 +35,41 @@ export default function Hotel() {
         toast("Não foi possível carregar");
       }
     });
-    hotel
-      .getHotels()
-      .then(({ data: hotels }) => {
-        setLoading(false);
-        hotels.forEach(h => {
-          const types = {};
-          let totalAvailable = 0;
-          h.rooms.forEach(r => {
-            if(!types[r.type]) types[r.type]=r.type;
-            totalAvailable+=r.available;
-          });
-          h.totalAvailable = totalAvailable;
-          h.types=Object.keys(types);
-          h.selected=false;
-        });
-        setHotels(hotels);
-      })
-      .catch(error => {
-        setLoadingMessage("Não foi possível carregar a página");
-        if (error.response?.data?.details) {
-          for (const detail of error.response.data.details) {
-            toast(detail);
-          }
-        } else {
-          toast("Não foi possível carregar");
-        }
-      });
+    updateHotels();
   }, []);
+
+  useInterval(() => {
+    updateHotels();
+   }, 3000);
+
+  function updateHotels() {
+    hotel
+    .getHotels()
+    .then(({ data: hotels }) => {
+      hotels.forEach((h, index) => {
+        const types = {};
+        let totalAvailable = 0;
+        h.rooms.forEach(r => {
+          if(!types[r.type]) types[r.type]=r.type;
+          totalAvailable+=r.available;
+          if(currentRoom.id===r.id) r.selected = true;
+        });
+        h.totalAvailable = totalAvailable;
+        h.types=Object.keys(types);
+        h.selected=currentHotel===index?true:false;
+      });
+      setHotels(hotels);
+    })
+    .catch(error => {
+      if (error.response?.data?.details) {
+        for (const detail of error.response.data.details) {
+          toast(detail);
+        }
+      } else {
+        toast("Não foi possível carregar");
+      }
+    });
+  }
 
   function hotelSelection(current) {
     hotels.forEach((h, index) => index===current?h.selected=true:h.selected=false);
