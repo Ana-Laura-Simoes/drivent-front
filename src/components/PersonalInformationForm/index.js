@@ -144,7 +144,10 @@ export default function PersonalInformationForm() {
   return (
     <>
       <StyledTypography variant="h4">
+<<<<<<< HEAD
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvajLGrWv_mrzhoJ8Jc7bNiGIAowY-X8aUzA&usqp=CAU" alt="profile"/>
+=======
+>>>>>>> main
         Suas Informações
       </StyledTypography>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -278,9 +281,12 @@ export default function PersonalInformationForm() {
               onChange={handleChange("addressDetail")}
             />
           </InputWrapper>
+<<<<<<< HEAD
           <Button onClick={() => uploadImage()}>
             Upload Image
           </Button>
+=======
+>>>>>>> main
           
           <SubmitContainer>
             <Button type="submit" disabled={dynamicInputIsLoading}>
@@ -295,14 +301,6 @@ export default function PersonalInformationForm() {
 
 const StyledTypography = styled(Typography)`
   margin-bottom: 20px!important;
-  display: flex;
-  align-items: center;
-  img{
-    height: 60px;
-    width: 60px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
 `;
 
 const SubmitContainer = styled.div`
