@@ -15,7 +15,6 @@ import useApi from "../../hooks/useApi";
 
 export default function ForgetPassword() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [loadingSignIn, setLoadingSignIn] = useState(false);
 
   const api = useApi();
@@ -27,19 +26,23 @@ export default function ForgetPassword() {
     event.preventDefault();
     setLoadingSignIn(true);
 
-    api.auth
-      .signIn(email, password)
+    const body = { email };
+    console.log(body);
+
+    api.forgetpassword
+      .getRecoveryPassword(body)
       .then((response) => {
-        setUserData(response.data);
+        toast(
+          "Um email foi enviado com um link temporário para a recuperação da sua senha"
+        );
       })
       .catch((error) => {
         /* eslint-disable-next-line no-console */
         console.error(error);
+        console.log(error.response);
 
-        if (error.response) {
-          for (const detail of error.response.data.details) {
-            toast(detail);
-          }
+        if (error.response.data.message) {         
+            toast(error.response.data.message);          
         } else {
           toast("Não foi possível conectar ao servidor!");
         }

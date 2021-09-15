@@ -9,6 +9,7 @@ import RoomApi from "../services/RoomApi";
 import UserActivitiesApi from "../services/UserActivitiesApi";
 import ActivityApi from "../services/ActivityApi";
 import LocationApi from "../services/LocationApi";
+import ForgetPasswordApi from "../services/ForgetPasswordApi";
 
 export default function useApi() {
   return {
@@ -22,6 +23,7 @@ export default function useApi() {
     room: new RoomApi(),
     userActivities: new UserActivitiesApi(),
     activity: new ActivityApi(),
-    location: new LocationApi()
+    location: new LocationApi(),
+    forgetpassword: new ForgetPasswordApi(),
   };
 }
