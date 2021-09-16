@@ -57,10 +57,7 @@ export default function NewPassword() {
         history.push("/sign-in");        
       })
       .catch((error) => {
-        /* eslint-disable-next-line no-console */
-        console.error(error);
-        console.log(error.response);
-
+        /* eslint-disable-next-line no-console */  
         if (error.response.data.message) {
           toast(error.response.data.message);
         } else {
