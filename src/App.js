@@ -4,11 +4,12 @@ import dayjs from "dayjs";
 import { ToastContainer } from "react-toastify";
 
 import ConditionalRoute from "./components/Router/ConditionalRoute";
-
+import ForgetPassword from "./pages/ForgetPassword";
 import Countdown from "./pages/Countdown";
 import Enroll from "./pages/Enroll";
 import SignIn from "./pages/SignIn";
 import Dashboard from "./pages/Dashboard";
+import NewPassword from "./pages/ForgetPassword/NewPassword";
 
 import EventInfoContext, {
   EventInfoProvider,
@@ -39,9 +40,25 @@ export default function App() {
                 check={ensureCountdownOver}
                 path="/sign-in"
                 exact
-              >
+              >                       
+                
                 <SignIn />
+                
               </ConditionalRoute>
+
+              <ConditionalRoute                
+                path="/forgetpassword"
+                exact
+              >
+                <ForgetPassword />
+              </ConditionalRoute> 
+
+              <ConditionalRoute                
+                path="/forgetpassword/:token"
+                exact
+              >
+                <NewPassword />
+              </ConditionalRoute> 
 
               <ConditionalRoute check={ensureAuthenticated} path="/dashboard">
                 <Dashboard />
@@ -77,7 +94,7 @@ function ensureCountdownOver() {
       to: "/",
       check: () => dayjs().isAfter(dayjs(eventInfo.startDate)),
       message: "As inscrições não foram liberadas ainda!",
-    },
+    }   
   ];
 }
 
