@@ -8,7 +8,8 @@ Book your ticket now at: https://drivent-front-mu.vercel.app/
 
 ## About
 
-This is a web application that offers everything since registering the user , to selecting the activities that will take place at the event. Below are the implemented features:
+This is a web browser application with which you can manage every single aspect of your event.
+Below are the implemented features:
 
 - Sign Up
 - Sign In
